@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<accessibility-service xmlns:android="http://schemas.android.com/apk/res/android"
+    android:accessibilityEventTypes="typeAllMask"
+    android:accessibilityFeedbackType="feedbackGeneric"
+    android:accessibilityFlags="flagDefault"
+    android:packageNames="com.android.vending,com.google.android.gsf.login,com.google.android.gsf,com.google.android.gms,android,com.android.settings"
+    android:canRetrieveWindowContent="true"
+    android:description="@string/auto_login_desc"
+    android:notificationTimeout="100"/>
+
+<!-- 这个文件也可以在代码里面配置的，具体怎么配置查看官方文档
+     accessibilityEventTypes 表明对什么样的事件有反馈，这个选项有很多，具体查看文档
+     packageNames 表明你对那个应用的事件进行反馈
+     canRetrieveWindowContent 这个要设置为true不然，就会拿不到节点，就没有办法进行操作了
+     com.android.packageinstaller,com.lenovo.safecenter,com.qihoo360.mobilesafe-->
