@@ -18,6 +18,7 @@ import android.widget.Button;
 public class MainActivity extends AppCompatActivity {
 
     Button startBtn;
+    Button gpBtn;
     protected Context context;
 
     @Override
@@ -37,6 +38,14 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        gpBtn = (Button) findViewById(R.id.gp);
+        gpBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=com.juanpi.in"));
+                context.startActivity(intent);
+            }
+        });
 //       FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
 //        fab.setOnClickListener(new View.OnClickListener() {
 //            @Override

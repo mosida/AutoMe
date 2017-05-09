@@ -220,4 +220,136 @@ public class Actions {
         return false;
     }
 
+    // INSTALL
+    // com.android.vending
+    // android.widget.Button
+    // com.android.vending:id/buy_button
+    public static final boolean installAction(AccessibilityNodeInfo nodeInfo) {
+        if (nodeInfo==null){
+            return false;
+        }
+
+        List<AccessibilityNodeInfo> installNodes = nodeInfo.findAccessibilityNodeInfosByViewId("com.android.vending:id/buy_button");
+        if (installNodes != null && !installNodes.isEmpty()) {
+
+            for (AccessibilityNodeInfo node : installNodes) {
+                if(node.isEnabled())
+                {
+                    node.performAction(AccessibilityNodeInfo.ACTION_FOCUS); // 获取焦点
+                    boolean performResult = node.performAction(AccessibilityNodeInfo.ACTION_CLICK);
+                    Log.i(TAG, "installNodes perform result is " + performResult);
+                    if(performResult)
+                    {
+//                        if(GmailActiveAutomationService.isGmailActiveService)
+//                        {
+//                            isInputedPassword = false;
+//                        }
+//                        node.recycle();
+                        return true;
+                    }
+                }
+//                node.recycle();
+            }
+        } else {
+            Log.i(TAG, "installNodes is null");
+        }
+        return false;
+    }
+
+    // ACCEPT
+    // com.android.vending
+    // android.widget.Button
+    // com.android.vending:id/continue_button
+    public static final boolean acceptAction(AccessibilityNodeInfo nodeInfo) {
+        if (nodeInfo==null){
+            return false;
+        }
+
+        List<AccessibilityNodeInfo> acceptNodes = nodeInfo.findAccessibilityNodeInfosByViewId("com.android.vending:id/continue_button");
+        if (acceptNodes != null && !acceptNodes.isEmpty()) {
+
+            for (AccessibilityNodeInfo node : acceptNodes) {
+                if(node.isEnabled())
+                {
+                    node.performAction(AccessibilityNodeInfo.ACTION_FOCUS); // 获取焦点
+                    boolean performResult = node.performAction(AccessibilityNodeInfo.ACTION_CLICK);
+                    Log.i(TAG, "acceptNodes perform result is " + performResult);
+                    if(performResult)
+                    {
+//                        if(GmailActiveAutomationService.isGmailActiveService)
+//                        {
+//                            isInputedPassword = false;
+//                        }
+//                        node.recycle();
+                        return true;
+                    }
+                }
+//                node.recycle();
+            }
+        } else {
+            Log.i(TAG, "acceptNodes is null");
+        }
+        return false;
+    }
+
+    // com.android.vending:id/cancel_download
+    // android.widget.ImageView
+    // com.android.vending
+    public static final boolean cancelDownloadAction(AccessibilityNodeInfo nodeInfo) {
+        if (nodeInfo==null){
+            return false;
+        }
+
+        List<AccessibilityNodeInfo> cancelNodes = nodeInfo.findAccessibilityNodeInfosByViewId("com.android.vending:id/cancel_download");
+        if (cancelNodes != null && !cancelNodes.isEmpty()) {
+
+            for (AccessibilityNodeInfo node : cancelNodes) {
+                if(node.isEnabled())
+                {
+                    node.performAction(AccessibilityNodeInfo.ACTION_FOCUS); // 获取焦点
+                    boolean performResult = node.performAction(AccessibilityNodeInfo.ACTION_CLICK);
+                    Log.i(TAG, "cancelNodes perform result is " + performResult);
+                    if(performResult)
+                    {
+//                        if(GmailActiveAutomationService.isGmailActiveService)
+//                        {
+//                            isInputedPassword = false;
+//                        }
+//                        node.recycle();
+                        return true;
+                    }
+                }
+//                node.recycle();
+            }
+        } else {
+            Log.i(TAG, "cancelNodes is null");
+        }
+        return false;
+    }
+
+
+    // com.android.vending:id/star5
+    // android.widget.ImageView
+    // com.android.vending
+
+
+    // Submit
+    // android.widget.Button
+    // com.android.vending
+    // com.android.vending:id/review_continue_button
+
+    // com.android.vending:id/star5
+    // android.widget.ImageView
+    // com.android.vending
+
+    // Tell us what you think
+    // com.android.vending:id/review_comment
+    // android.widget.EditText
+    // com.android.vending
+
+    // Finish
+    // com.android.vending:id/review_continue_button
+    // android.widget.Button
+    // com.android.vending
+
 }

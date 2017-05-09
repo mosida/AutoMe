@@ -13,13 +13,18 @@ import android.view.accessibility.AccessibilityNodeInfo;
 public class LoginAutoService extends AccessibilityService {
 
     public static final String TAG = "LoginAutoService";
-
+    // 登录步骤
     private boolean existingAction = false;
     private boolean accountAction = false;
     private boolean pwdAction = false;
     private boolean next1Action = false;
     private boolean button1Action = false;
     private boolean next2Action = false;
+
+    //
+
+
+
 
 
     public LoginAutoService() {
