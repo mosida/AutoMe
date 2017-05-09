@@ -9,4 +9,7 @@ public class Constants {
     public static final String demoAccount = "mosidahuang@gmail.com";
     public static final String demoPwd = "Mosida26600617";
 
+
+    public static final String PACKAGE_GSF_LOGIN = "com.google.android.gsf.login";
+
 }
