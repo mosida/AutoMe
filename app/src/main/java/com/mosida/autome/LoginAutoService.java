@@ -14,6 +14,14 @@ public class LoginAutoService extends AccessibilityService {
 
     public static final String TAG = "LoginAutoService";
 
+    private boolean existingAction = false;
+    private boolean accountAction = false;
+    private boolean pwdAction = false;
+    private boolean next1Action = false;
+    private boolean button1Action = false;
+    private boolean next2Action = false;
+
+
     public LoginAutoService() {
     }
 
@@ -42,25 +50,32 @@ public class LoginAutoService extends AccessibilityService {
 
     @SuppressLint({ "NewApi"})
     private void performAutomationAction(AccessibilityEvent event) {
-        AccessibilityNodeInfo nodeInfo = getRootInActiveWindow();
-        if (nodeInfo == null) {
-            Log.i(TAG, "nodeInfo is null");
-            return;
-        } else {
-            Log.i(TAG, "nodeInfo is not null packageName : " + nodeInfo.getPackageName());
-//            for (int i=0; i<nodeInfo.getChildCount(); i++){
-//                Log.i(TAG, "****************** getViewIdResourceName : " + nodeInfo.getChild(i).getViewIdResourceName());
-//                Log.i(TAG, "****************** getPackageName : " + nodeInfo.getChild(i).getPackageName());
-//                Log.i(TAG, "****************** getText : " + nodeInfo.getChild(i).getText());
-//                Log.i(TAG, "****************** getWindowId : " + nodeInfo.getChild(i).getWindowId());
-//                Log.i(TAG, "****************** getClassName : " + nodeInfo.getChild(i).getClassName());
-//            }
-        }
 
+        AccessibilityNodeInfo nodeInfo = getRootInActiveWindow();
         switch (event.getPackageName().toString()){
             case Constants.PACKAGE_GSF_LOGIN:
-                Actions.existingAction(nodeInfo);
-                Actions.emailsAction(nodeInfo, this);
+                if (!existingAction){
+                    existingAction = Actions.existingAction(nodeInfo);
+                }else{
+                    if (!accountAction){
+                        accountAction = Actions.emailsAction(nodeInfo, this);
+                    }
+                    if (!pwdAction){
+                        pwdAction = Actions.pwdAction(nodeInfo, this);
+                    }else{
+                        if (!next1Action){
+                            next1Action = Actions.next1Action(nodeInfo);
+                        }else {
+                            if (!button1Action){
+                                button1Action = Actions.button1Action(nodeInfo);
+                            }else{
+                                if (!next2Action){
+                                    next2Action = Actions.next2Action(nodeInfo);
+                                }
+                            }
+                        }
+                    }
+                }
 
                 break;
 
