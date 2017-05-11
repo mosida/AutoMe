@@ -6,10 +6,13 @@ package com.mosida.autome;
 
 public class Constants {
 
-    public static final String demoAccount = "mosidahuang@gmail.com";
-    public static final String demoPwd = "Mosida26600617";
+    public static final String demoAccount = "mosida20004@gmail.com";
+    public static final String demoPwd = "33338888";
 
+    public static final String demoAppCreator = "";
 
     public static final String PACKAGE_GSF_LOGIN = "com.google.android.gsf.login";
+    public static final String PACKAGE_VENDING = "com.android.vending";
+
 
 }

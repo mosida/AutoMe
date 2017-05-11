@@ -2,6 +2,8 @@ package com.mosida.autome;
 
 import android.accessibilityservice.AccessibilityService;
 import android.annotation.SuppressLint;
+import android.content.Intent;
+import android.net.Uri;
 import android.util.Log;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityNodeInfo;
@@ -22,7 +24,10 @@ public class LoginAutoService extends AccessibilityService {
     private boolean next2Action = false;
 
     //
-
+    private boolean installAction = false;
+    private boolean cancelInstallAction = false;
+    private boolean scrollAction = false;
+    private boolean submitAction = false;
 
 
 
@@ -81,8 +86,15 @@ public class LoginAutoService extends AccessibilityService {
                         }
                     }
                 }
-
                 break;
+            case Constants.PACKAGE_VENDING:
+                if (!Actions.findAppCreator(nodeInfo)){
+                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=club.fromfactory"));
+                    startActivity(intent);
+                }else{
+                    // 点击下载按钮
+
+                }
 
         }
     }

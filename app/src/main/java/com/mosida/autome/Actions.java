@@ -352,4 +352,33 @@ public class Actions {
     // android.widget.Button
     // com.android.vending
 
+    // Yes/Not Sure/No
+    // com.android.vending:id/question_option_text
+    // com.android.vending
+    // android.widget.TextView
+
+    // Factory Club
+    // android.widget.TextView
+    // com.android.vending:id/title_creator
+    // com.android.vending
+    public static final boolean findAppCreator(AccessibilityNodeInfo nodeInfo){
+        if (nodeInfo==null){
+            return false;
+        }
+
+        List<AccessibilityNodeInfo> creatorNodes = nodeInfo.findAccessibilityNodeInfosByViewId("com.android.vending:id/title_creator");
+            if (creatorNodes != null && !creatorNodes.isEmpty()) {
+
+            for (AccessibilityNodeInfo node : creatorNodes) {
+                if (!node.getText().equals("Factory Club")){
+                    return false;
+                }else{
+                    return true;
+                }
+            }
+        } else {
+            Log.i(TAG, "cancelNodes is null");
+        }
+        return false;
+    }
 }
