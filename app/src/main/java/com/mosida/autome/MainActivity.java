@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
         gpBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=com.juanpi.in"));
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + Constants.demoAppPackage));
                 context.startActivity(intent);
             }
         });

@@ -24,10 +24,12 @@ public class LoginAutoService extends AccessibilityService {
     private boolean next2Action = false;
 
     //
+    private boolean findAppCreatorAction = false;
     private boolean installAction = false;
     private boolean cancelInstallAction = false;
     private boolean scrollAction = false;
     private boolean submitAction = false;
+    private boolean acceptAction = false;
 
 
 
@@ -62,6 +64,9 @@ public class LoginAutoService extends AccessibilityService {
     private void performAutomationAction(AccessibilityEvent event) {
 
         AccessibilityNodeInfo nodeInfo = getRootInActiveWindow();
+
+        Log.i(TAG, "packagename" + event.getPackageName().toString());
+
         switch (event.getPackageName().toString()){
             case Constants.PACKAGE_GSF_LOGIN:
                 if (!existingAction){
@@ -88,13 +93,50 @@ public class LoginAutoService extends AccessibilityService {
                 }
                 break;
             case Constants.PACKAGE_VENDING:
-                if (!Actions.findAppCreator(nodeInfo)){
-                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=club.fromfactory"));
-                    startActivity(intent);
+                Log.i(TAG, "PACKAGE_VENDING");
+
+                if (!findAppCreatorAction){
+                    findAppCreatorAction = Actions.findAppCreator(nodeInfo);
+                    Log.i(TAG, "findAppCreatorAction is : "+findAppCreatorAction);
+
+                    if (!findAppCreatorAction){
+                        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + Constants.demoAppPackage));
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(intent);
+                    }
+                    Log.i(TAG, "findAppCreatorAction false");
                 }else{
                     // 点击下载按钮
+                    if (!installAction){
+                        Log.i(TAG, "installAction false");
 
+                        installAction = Actions.installAction(nodeInfo);
+                    }else{
+                        if(!acceptAction){
+                            Log.i(TAG, "acceptAction false");
+                            acceptAction = Actions.acceptAction(nodeInfo);
+                        }else{
+
+                            if (!cancelInstallAction){
+                                Log.i(TAG, "cancelInstallAction false");
+                                cancelInstallAction = Actions.cancelDownloadAction(nodeInfo);
+                            }else{
+                                if (!scrollAction){
+                                    Log.i(TAG, "scrollAction false");
+                                    scrollAction = Actions.findReviewCard(nodeInfo);
+                                }else{
+
+                                    if (!submitAction){
+                                        Log.i(TAG, "submitAction false");
+
+                                        submitAction = Actions.reviewAction(nodeInfo, this);
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
+                break;
 
         }
     }
