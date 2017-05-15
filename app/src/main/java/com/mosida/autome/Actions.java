@@ -4,7 +4,6 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.util.Log;
-import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityNodeInfo;
 
 import java.util.List;
@@ -20,6 +19,9 @@ public class Actions {
     // com.google.android.gsf.login:id/next_button
     // android.widget.Button
     public static final boolean existingAction(AccessibilityNodeInfo nodeInfo) {
+        if (nodeInfo == null) {
+            return false;
+        }
         List<AccessibilityNodeInfo> existingNodes = nodeInfo.findAccessibilityNodeInfosByViewId("com.google.android.gsf.login:id/next_button");
         if (existingNodes != null && !existingNodes.isEmpty()) {
 
@@ -42,7 +44,9 @@ public class Actions {
     // com.google.android.gsf.login:id/username_edit
     // android.widget.EditText
     public static final boolean emailsAction(AccessibilityNodeInfo nodeInfo, Context context) {
-
+        if (nodeInfo == null) {
+            return false;
+        }
         List<AccessibilityNodeInfo> emailNodes = nodeInfo.findAccessibilityNodeInfosByViewId("com.google.android.gsf.login:id/username_edit");
 
 //        Log.i(TAG, nodeInfo.toString());
@@ -53,14 +57,14 @@ public class Actions {
             Log.i(TAG, "Email node is not null");
 
             for (AccessibilityNodeInfo node : emailNodes) {
-                if (!node.getText().equals("Email")) {
+                if (!node.getText().equals(LoginAutoService.emailNodeName)) {
                     Log.i(TAG, "Email editText is :" + node.getText());
                     return true;
                 }
 
                 if (node.isEditable()) {
                     ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
-                    ClipData clip = ClipData.newPlainText("Email", Constants.demoAccount);
+                    ClipData clip = ClipData.newPlainText(LoginAutoService.emailNodeName, LoginAutoService.gmailInfo.email);
                     clipboard.setPrimaryClip(clip);
                     boolean performResult = node.performAction(AccessibilityNodeInfo.ACTION_PASTE);
                     Log.i(TAG, "Email perform result is " + performResult);
@@ -82,6 +86,9 @@ public class Actions {
     // android.widget.EditText
     // com.google.android.gsf.login:id/password_edit
     public static final boolean pwdAction(AccessibilityNodeInfo nodeInfo, Context context) {
+        if (nodeInfo == null) {
+            return false;
+        }
         List<AccessibilityNodeInfo> pwdNodes = nodeInfo.findAccessibilityNodeInfosByViewId("com.google.android.gsf.login:id/password_edit");
 
 //        Log.i(TAG, nodeInfo.toString());
@@ -99,7 +106,7 @@ public class Actions {
 //                }
                 if (node.isEditable()) {
                     ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
-                    ClipData clip = ClipData.newPlainText("Password", Constants.demoPwd);
+                    ClipData clip = ClipData.newPlainText(LoginAutoService.pwdNodeName, LoginAutoService.gmailInfo.password);
                     clipboard.setPrimaryClip(clip);
                     boolean performResult = node.performAction(AccessibilityNodeInfo.ACTION_PASTE);
                     Log.i(TAG, "Password perform result is " + performResult);
@@ -122,6 +129,9 @@ public class Actions {
     // com.google.android.gsf.login:id/next_button
     // android.widget.Button
     public static final boolean next1Action(AccessibilityNodeInfo nodeInfo) {
+        if (nodeInfo == null) {
+            return false;
+        }
         List<AccessibilityNodeInfo> next1Nodes = nodeInfo.findAccessibilityNodeInfosByViewId("com.google.android.gsf.login:id/next_button");
         if (next1Nodes != null && !next1Nodes.isEmpty()) {
 
@@ -152,6 +162,9 @@ public class Actions {
     // android:id/button1
     // android.widget.Button
     public static final boolean button1Action(AccessibilityNodeInfo nodeInfo) {
+        if (nodeInfo == null) {
+            return false;
+        }
         List<AccessibilityNodeInfo> button1Nodes = nodeInfo.findAccessibilityNodeInfosByViewId("android:id/button1");
         if (button1Nodes != null && !button1Nodes.isEmpty()) {
 
@@ -209,6 +222,62 @@ public class Actions {
         }
         return false;
     }
+
+    // com.android.vending:id/positive_button
+    // android.widget.Button
+    // com.android.vending
+    // ACCEPT
+    public static final boolean torAcceptAction(AccessibilityNodeInfo nodeInfo) {
+        if (nodeInfo == null) {
+            return false;
+        }
+
+        List<AccessibilityNodeInfo> torAcceptNodes = nodeInfo.findAccessibilityNodeInfosByViewId("com.android.vending:id/positive_button");
+        if (torAcceptNodes != null && !torAcceptNodes.isEmpty()) {
+
+            for (AccessibilityNodeInfo node : torAcceptNodes) {
+                node.performAction(AccessibilityNodeInfo.ACTION_FOCUS); // 获取焦点
+                boolean performResult = node.performAction(AccessibilityNodeInfo.ACTION_CLICK);
+                Log.i(TAG, "torAcceptNodes perform result is " + performResult);
+                if (performResult) {
+                    return true;
+                }
+            }
+        } else {
+            Log.i(TAG, "torAcceptNodes is null");
+        }
+
+
+        return false;
+    }
+
+    // com.android.vending:id/not_now_button
+    // NO THANKS
+    // android.widget.TextView
+    // com.android.vending
+    public static final boolean notNowAction(AccessibilityNodeInfo nodeInfo){
+        if (nodeInfo == null) {
+            return false;
+        }
+
+        List<AccessibilityNodeInfo> notNowNodes = nodeInfo.findAccessibilityNodeInfosByViewId("com.android.vending:id/not_now_button");
+        if (notNowNodes != null && !notNowNodes.isEmpty()) {
+
+            for (AccessibilityNodeInfo node : notNowNodes) {
+                node.performAction(AccessibilityNodeInfo.ACTION_FOCUS); // 获取焦点
+                boolean performResult = node.performAction(AccessibilityNodeInfo.ACTION_CLICK);
+                Log.i(TAG, "notNowNodes perform result is " + performResult);
+                if (performResult) {
+                    return true;
+                }
+            }
+        } else {
+            Log.i(TAG, "notNowNodes is null");
+        }
+        return false;
+    }
+
+
 
     // INSTALL
     // com.android.vending
@@ -321,16 +390,16 @@ public class Actions {
         if (submitNodes != null && !submitNodes.isEmpty()){
             for (AccessibilityNodeInfo node : submitNodes) {
                 if (node.isEnabled()){
-                    if (node.getText().toString().equals("Submit")){
+                    if (node.getText().toString().equals(LoginAutoService.reviewContinueButtonNodeName)){
                         node.performAction(AccessibilityNodeInfo.ACTION_CLICK);
                         return false;
                     }
-                    if (node.getText().toString().equals("Finish")){
+                    if (node.getText().toString().equals(LoginAutoService.reviewFinishButtonNodeName)){
                         List<AccessibilityNodeInfo> tellNodes = nodeInfo.findAccessibilityNodeInfosByViewId("com.android.vending:id/review_comment");
                         if (tellNodes != null && !tellNodes.isEmpty()){
                             for (AccessibilityNodeInfo node2 : tellNodes) {
                                 if (node2.isEditable()) {
-                                    if (!node2.getText().toString().equals("Tell us what you think")){
+                                    if (!node2.getText().toString().equals(LoginAutoService.tellNodeName)){
                                         node.performAction(AccessibilityNodeInfo.ACTION_CLICK);
                                         return true;
                                     }
@@ -352,8 +421,9 @@ public class Actions {
             }
         }
 
+        // Yes
         // com.android.vending:id/question_option_text
-        List<AccessibilityNodeInfo> yesNodes = nodeInfo.findAccessibilityNodeInfosByViewId("com.android.vending:id/question_option_text");
+        List<AccessibilityNodeInfo> yesNodes = nodeInfo.findAccessibilityNodeInfosByText(LoginAutoService.yesNodeName);
         if (yesNodes != null && !yesNodes.isEmpty()){
             for (AccessibilityNodeInfo node : yesNodes) {
                 if (node.isEnabled()==true) {
@@ -370,13 +440,13 @@ public class Actions {
         if (tellNodes != null && !tellNodes.isEmpty()){
             for (AccessibilityNodeInfo node : tellNodes) {
                 if (node.isEditable()) {
-                    if (!node.getText().toString().equals("Tell us what you think")){
+                    if (!node.getText().toString().equals(LoginAutoService.tellNodeName)){
                         return false;
                     }
                     node.performAction(AccessibilityNodeInfo.ACTION_FOCUS);
 
                     ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
-                    ClipData clip = ClipData.newPlainText("Reviews", Constants.demoReview);
+                    ClipData clip = ClipData.newPlainText("Reviews", LoginAutoService.gmailInfo.comment);
                     clipboard.setPrimaryClip(clip);
                     boolean performResult = node.performAction(AccessibilityNodeInfo.ACTION_PASTE);
                     Log.i(TAG, "Reviews perform result is " + performResult);
@@ -434,7 +504,7 @@ public class Actions {
             Log.i(TAG, "creatorNodes is not null");
 
             for (AccessibilityNodeInfo node : creatorNodes) {
-                if (node.getText().toString().equals(Constants.demoAppCreator)) {
+                if (node.getText().toString().equals(LoginAutoService.gmailInfo.appCreator)) {
                     Log.i(TAG, "creatorNodes is : "+ node.getText()+ " return true");
 
                     return true;
