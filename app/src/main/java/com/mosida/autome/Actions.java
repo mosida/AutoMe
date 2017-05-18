@@ -1,9 +1,14 @@
 package com.mosida.autome;
 
+import android.accessibilityservice.AccessibilityService;
+import android.app.Notification;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.util.Log;
+import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityNodeInfo;
 
 import java.util.List;
@@ -28,11 +33,8 @@ public class Actions {
             for (AccessibilityNodeInfo node : existingNodes) {
                 boolean performResult = node.performAction(AccessibilityNodeInfo.ACTION_CLICK);
                 if (performResult) {
-//                    node.recycle();
-//                    nodeInfo.recycle();
                     return true;
                 }
-//                node.recycle();
             }
         } else {
             Log.i(TAG, "existingNodes is null");
@@ -227,7 +229,7 @@ public class Actions {
     // android.widget.Button
     // com.android.vending
     // ACCEPT
-    public static final boolean torAcceptAction(AccessibilityNodeInfo nodeInfo) {
+    public static final boolean torAcceptAction(AccessibilityNodeInfo nodeInfo, Context context) {
         if (nodeInfo == null) {
             return false;
         }
@@ -240,6 +242,14 @@ public class Actions {
                 boolean performResult = node.performAction(AccessibilityNodeInfo.ACTION_CLICK);
                 Log.i(TAG, "torAcceptNodes perform result is " + performResult);
                 if (performResult) {
+                    try {
+                        Thread.sleep(3000);
+                        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + LoginAutoService.gmailInfo.packageName));
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        context.startActivity(intent);
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
                     return true;
                 }
             }
@@ -546,6 +556,139 @@ public class Actions {
                     node.performAction(AccessibilityNodeInfo.ACTION_SCROLL_FORWARD);
                 }
             }
+        }
+        return false;
+    }
+
+
+    // Proceed
+    // com.android.vending
+    // android.widget.Button
+    // android:id/button1
+    public static final boolean downloadLargeAppAction(AccessibilityNodeInfo nodeInfo) {
+        if (nodeInfo == null) {
+            return false;
+        }
+        List<AccessibilityNodeInfo> downloadLargeAppNodes = nodeInfo.findAccessibilityNodeInfosByViewId("android:id/button1");
+        if (downloadLargeAppNodes != null && !downloadLargeAppNodes.isEmpty()) {
+
+            for (AccessibilityNodeInfo node : downloadLargeAppNodes) {
+                node.performAction(AccessibilityNodeInfo.ACTION_FOCUS); // 获取焦点
+                boolean performResult = node.performAction(AccessibilityNodeInfo.ACTION_CLICK);
+                Log.i(TAG, "downloadLargeAppNodes perform result is " + performResult);
+                if (performResult) {
+                    return true;
+                }
+            }
+        } else {
+            Log.i(TAG, "downloadLargeAppNodes is null");
+        }
+        return false;
+    }
+
+    // android.widget.ListView
+    // com.android.vending:id/play_drawer_list
+    // com.android.vending
+    public static final boolean playDrawerListShowup(AccessibilityNodeInfo nodeInfo, Context context) {
+        if (nodeInfo == null) {
+            return false;
+        }
+        List<AccessibilityNodeInfo> downloadLargeAppNodes = nodeInfo.findAccessibilityNodeInfosByViewId("com.android.vending:id/play_drawer_list");
+        if (downloadLargeAppNodes != null && !downloadLargeAppNodes.isEmpty()) {
+
+            for (AccessibilityNodeInfo node : downloadLargeAppNodes) {
+                if (node!=null){
+                    Log.i(TAG, "playDrawerListShowup is showup right now!");
+                    ShellUtils.execCommand("input tap 650 218", true);
+
+//                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id="+LoginAutoService.gmailInfo.packageName));
+//                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//                    context.startActivity(intent);
+                    return true;
+                }
+            }
+        } else {
+            Log.i(TAG, "playDrawerListShowup is not showup");
+        }
+        return false;
+    }
+
+    // GET STARTED
+    // com.android.vending:id/play_onboard_center_button
+    // android.widget.Button
+    // com.android.vending
+    public static final boolean getStartedAction(AccessibilityNodeInfo nodeInfo, Context context){
+        if (nodeInfo == null) {
+            return false;
+        }
+        List<AccessibilityNodeInfo> getStartedActionNodes = nodeInfo.findAccessibilityNodeInfosByViewId("com.android.vending:id/play_onboard_center_button");
+        if (getStartedActionNodes != null && !getStartedActionNodes.isEmpty()) {
+
+            for (AccessibilityNodeInfo node : getStartedActionNodes) {
+                if (node!=null){
+                    boolean performResult = node.performAction(AccessibilityNodeInfo.ACTION_CLICK);
+                    Log.i(TAG, "getStartedAction perform result is " + performResult);
+                    if (performResult) {
+                        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id="+LoginAutoService.gmailInfo.packageName));
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        context.startActivity(intent);
+                        return true;
+                    }
+                }
+            }
+        } else {
+            Log.i(TAG, "getStartedAction is null");
+        }
+        return false;
+    }
+
+
+    // Continue
+    // android:id/button1
+    // android.widget.Button
+    // com.android.vending
+    public static final boolean completeAccountSetupAction(AccessibilityNodeInfo nodeInfo){
+        if (nodeInfo == null) {
+            return false;
+        }
+        List<AccessibilityNodeInfo> completeAccountSetupNodes = nodeInfo.findAccessibilityNodeInfosByViewId("android:id/button1");
+        if (completeAccountSetupNodes != null && !completeAccountSetupNodes.isEmpty()) {
+
+            for (AccessibilityNodeInfo node : completeAccountSetupNodes) {
+                if (node!=null){
+                    boolean performResult = node.performAction(AccessibilityNodeInfo.ACTION_CLICK);
+                    Log.i(TAG, "completeAccountSetupNodes perform result is " + performResult);
+                    if (performResult) {
+                        return true;
+                    }
+                }
+            }
+        } else {
+            Log.i(TAG, "completeAccountSetupNodes is null");
+        }
+        return false;
+    }
+
+    // Retry
+    // com.android.vending:id/retry_button
+    public static final boolean retryAction(AccessibilityNodeInfo nodeInfo){
+        if (nodeInfo == null) {
+            return false;
+        }
+        List<AccessibilityNodeInfo> retryNodes = nodeInfo.findAccessibilityNodeInfosByViewId("com.android.vending:id/retry_button");
+        if (retryNodes != null && !retryNodes.isEmpty()) {
+
+            for (AccessibilityNodeInfo node : retryNodes) {
+                if (node!=null){
+                    boolean performResult = node.performAction(AccessibilityNodeInfo.ACTION_CLICK);
+                    Log.i(TAG, "retryNodes perform result is " + performResult);
+                    if (performResult) {
+                        return true;
+                    }
+                }
+            }
+        } else {
+            Log.i(TAG, "retryNodes is null");
         }
         return false;
     }

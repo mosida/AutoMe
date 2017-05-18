@@ -16,6 +16,7 @@ public class Constants {
 
     public static final String PACKAGE_GSF_LOGIN = "com.google.android.gsf.login";
     public static final String PACKAGE_VENDING = "com.android.vending";
+    public static final String PACKAGE_TITAN = "com.keramidas.TitaniumBackup";
 
     public static final String LANG_ZH = "zh";
     public static final String EMAIL_NODE_NAME_ZH = "電子郵件";
@@ -33,4 +34,8 @@ public class Constants {
     public static final String TELL_NODE_NAME_EN = "Tell us what you think";
     public static final String REVIEWFINISHBUTTON_NODE_NAME_EN = "Finish";
     public static final String YES_NODE_NAME_EN = "Yes";
+
+
+    public static final String TITAN_BACKUP = "backup";
+    public static final String TITAN_RESOTRE = "restore";
 }

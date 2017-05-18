@@ -31,7 +31,7 @@ public class LoginAutoService extends AccessibilityService {
     private boolean button1Action = false;
     private boolean next2Action = false;
 
-    //
+    // node Actions
     private boolean findAppCreatorAction = false;
     private boolean installAction = false;
     private boolean cancelInstallAction = false;
@@ -41,6 +41,10 @@ public class LoginAutoService extends AccessibilityService {
     private boolean torAcceptAction = false;
     private boolean notNowAction = false;
     private boolean signinSuccessfulAction = false;
+    private boolean downloadLargeAppAction = false;
+    private boolean getStartedAction = false;
+
+
     // node Name
     public static String emailNodeName;
     public static String pwdNodeName;
@@ -52,12 +56,8 @@ public class LoginAutoService extends AccessibilityService {
     private static String lang;
 
 
-//    public LoginAutoService() {
-//
-//
-//
-//
-//    }
+    public static String titanState;
+
 
     @Override
     public void onCreate() {
@@ -92,40 +92,40 @@ public class LoginAutoService extends AccessibilityService {
     @Override
     public void onAccessibilityEvent(AccessibilityEvent event) {
 
-        if (gmailInfo==null){
-            File file = new File(Environment.getExternalStorageDirectory(),
-                    Constants.accountFile);
-            if (file.exists()){
-                Log.i(TAG, "file.exists!");
-            }else{
-                Log.i(TAG, "no file for start gp!");
-                return;
-            }
-            if (Environment.getExternalStorageState().equals(
-                    Environment.MEDIA_MOUNTED)) {
-                try {
-                    FileInputStream inputStream = new FileInputStream(file);
-                    byte[] b = new byte[inputStream.available()];
-                    inputStream.read(b);
-                    String result = new String(b);
-                    Log.i(TAG, "file data is : "+ result);
-                    String[] account = result.split(",");
-                    gmailInfo = new GmailInfo();
-                    gmailInfo.email = account[0];
-                    gmailInfo.password = account[1];
-                    gmailInfo.gid = account[2];
-                    gmailInfo.comment = account[3];
-                    gmailInfo.packageName = account[4];
-                    gmailInfo.appCreator = account[5];
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            } else {
-                Log.i(TAG, "read myaccount file fail!");
-            }
-
-        }
+//        if (gmailInfo==null){
+//            File file = new File(Environment.getExternalStorageDirectory(),
+//                    Constants.accountFile);
+//            if (file.exists()){
+//                Log.i(TAG, "file.exists!");
+//            }else{
+//                Log.i(TAG, "no file for start gp!");
+//                return;
+//            }
+//            if (Environment.getExternalStorageState().equals(
+//                    Environment.MEDIA_MOUNTED)) {
+//                try {
+//                    FileInputStream inputStream = new FileInputStream(file);
+//                    byte[] b = new byte[inputStream.available()];
+//                    inputStream.read(b);
+//                    String result = new String(b);
+//                    Log.i(TAG, "file data is : "+ result);
+//                    String[] account = result.split(",");
+//                    gmailInfo = new GmailInfo();
+//                    gmailInfo.email = account[0];
+//                    gmailInfo.password = account[1];
+//                    gmailInfo.gid = account[2];
+//                    gmailInfo.comment = account[3];
+//                    gmailInfo.packageName = account[4];
+//                    gmailInfo.appCreator = account[5];
+//
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
+//            } else {
+//                Log.i(TAG, "read myaccount file fail!");
+//            }
+//
+//        }
 
 
         int eventType = event.getEventType();
@@ -197,9 +197,17 @@ public class LoginAutoService extends AccessibilityService {
                     notNowAction = Actions.notNowAction(nodeInfo);
                 }
 
-                if (!torAcceptAction){
-                    torAcceptAction = Actions.torAcceptAction(nodeInfo);
+                Actions.playDrawerListShowup(nodeInfo, this);
+                Actions.completeAccountSetupAction(nodeInfo);
+                Actions.retryAction(nodeInfo);
+//                if (!torAcceptAction){
+                    torAcceptAction = Actions.torAcceptAction(nodeInfo, this);
+//                }
+
+                if (!getStartedAction){
+                    getStartedAction = Actions.getStartedAction(nodeInfo, this);
                 }
+
                 if (!findAppCreatorAction){
                     findAppCreatorAction = Actions.findAppCreator(nodeInfo);
                     Log.i(TAG, "findAppCreatorAction is : "+findAppCreatorAction);
@@ -211,6 +219,13 @@ public class LoginAutoService extends AccessibilityService {
                     }
                     Log.i(TAG, "findAppCreatorAction false");
                 }else{
+                    // 下载游戏
+                    if (!downloadLargeAppAction){
+                        Log.i(TAG, "downloadLargeAppAction");
+                        downloadLargeAppAction = Actions.downloadLargeAppAction(nodeInfo);
+                    }
+
+
                     // 点击下载按钮
                     if (!installAction){
                         Log.i(TAG, "installAction false");
@@ -232,7 +247,6 @@ public class LoginAutoService extends AccessibilityService {
                                 }else{
                                     if (!submitAction){
                                         Log.i(TAG, "submitAction false");
-
                                         submitAction = Actions.reviewAction(nodeInfo, this);
                                     }
                                 }
@@ -241,10 +255,24 @@ public class LoginAutoService extends AccessibilityService {
                     }
                 }
                 break;
+            case Constants.PACKAGE_TITAN:
+                Log.i(TAG, "PACKAGE_TITAN");
+                TitanActions.waringAction(nodeInfo);
+                TitanActions.checkAction(nodeInfo);
+//                if (titanState.equals(Constants.TITAN_BACKUP)){
+//
+//                }
+//                if (titanState.equals(Constants.TITAN_RESOTRE)){
+//
+//                }
+                TitanActions.backupAllAppAction(nodeInfo);
+                break;
             default:
                 break;
         }
     }
+
+
 
 
 

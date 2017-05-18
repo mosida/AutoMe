@@ -22,6 +22,8 @@
 
 
         <service android:name=".MissionService"></service>
+        <service android:name=".BackupService"></service>
+
 
         <service android:name=".LoginAutoService"
             android:label="@string/auto_login"
