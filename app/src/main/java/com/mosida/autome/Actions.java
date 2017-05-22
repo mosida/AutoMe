@@ -234,7 +234,7 @@ public class Actions {
             return false;
         }
 
-        List<AccessibilityNodeInfo> torAcceptNodes = nodeInfo.findAccessibilityNodeInfosByViewId("com.android.vending:id/positive_button");
+        List<AccessibilityNodeInfo> torAcceptNodes = nodeInfo.findAccessibilityNodeInfosByText("ACCEPT");
         if (torAcceptNodes != null && !torAcceptNodes.isEmpty()) {
 
             for (AccessibilityNodeInfo node : torAcceptNodes) {

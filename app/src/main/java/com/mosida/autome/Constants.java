@@ -38,4 +38,38 @@ public class Constants {
 
     public static final String TITAN_BACKUP = "backup";
     public static final String TITAN_RESOTRE = "restore";
+
+    // Accounts
+    // com.android.backupconfirm 4.4.4-eng.genymotion.20170320.221842
+    // com.android.keyguard 4.4.4-eng.genymotion.20170320.221842
+    // com.android.sharedstoragebackup 4.4.4-eng.genymotion.20170320.221842
+    // Gmail 4.7.2 (967015)
+    // Google Account Manager 4.4.2-940549
+    // Google Backup Transport 4.4.2-940549
+    // Google Play services 10.2.98 (070-146496160)
+    // Google Play Store 7.8.16.P-all [0] [PR] 155590935
+    // Google Services Framework 4.4.2-940549
+    // Google+ 9.10.0.152874827
+    // Settings Storage 4.4.4-eng.genymotion.20170320.221842 (SETTINGS/BLUETOOTH)
+    public static final String PHONE_ACCOUNT = "Accounts";
+    public static final String PHONE_BACKUPCONFIRM = "com.android.backupconfirm 4.4.4-eng.genymotion.20170320.221842";
+    public static final String PHONE_KEYGUARD = "com.android.keyguard 4.4.4-eng.genymotion.20170320.221842";
+    public static final String PHONE_SHAREDSTORAGEBACKUP = "com.android.sharedstoragebackup 4.4.4-eng.genymotion.20170320.221842";
+    public static final String PHONE_GMAIL = "Gmail 4.7.2 (967015)";
+    public static final String PHONE_GAM = "Google Account Manager 4.4.2-940549";
+    public static final String PHONE_GBT = "Google Backup Transport 4.4.2-940549";
+    public static final String PHONE_GPSER = "Google Play services 10.2.98 (070-146496160)";
+    public static final String PHONE_GPSTO = "Google Play Store 7.8.16.P-all [0] [PR] 155590935";
+    public static final String PHONE_GPSTO2 = "Google Play Store 7.7.31.O-all [0] [PR] 153394623";
+    public static final String PHONE_GSF = "Google Services Framework 4.4.2-940549";
+    public static final String PHONE_GPLUS = "Google+ 9.10.0.152874827";
+    public static final String PHONE_GPLUS2 = "Google+ 9.12.0.155676601";
+    public static final String PHONE_SS = "Settings Storage 4.4.4-eng.genymotion.20170320.221842 (SETTINGS/BLUETOOTH)";
+
+
+
+
+
 }
+
+

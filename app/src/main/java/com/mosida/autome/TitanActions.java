@@ -47,13 +47,28 @@ public class TitanActions {
         }
         List<AccessibilityNodeInfo> checkNodes = nodeInfo.findAccessibilityNodeInfosByViewId("android:id/action_bar");
         if (checkNodes != null && !checkNodes.isEmpty()) {
-            Log.i(TAG, "checkNodes is not null");
-            for (AccessibilityNodeInfo node : checkNodes) {
-                ShellUtils.execCommand("input tap 600 55", true);
-                return true;
-            }
+           ShellUtils.execCommand("input tap 600 55", true);
+           return true;
         } else {
             Log.i(TAG, "checkNodes is null");
+        }
+        return false;
+    }
+
+    // backup
+    public static final boolean backupAction(){
+        ShellUtils.execCommand("input tap 700 100", true);
+        return false;
+    }
+
+    // Scroll Action
+    public static final boolean scrollAction(){
+        // adb shell input swipe 250 250 300 300
+        try{
+            Thread.sleep(2000);
+            ShellUtils.execCommand("input swipe 300 800 300 500", true);
+        }catch (Exception e){
+            e.printStackTrace();
         }
         return false;
     }
@@ -69,7 +84,7 @@ public class TitanActions {
             Log.i(TAG, "backupAppsNode is not null");
             for (AccessibilityNodeInfo node : backupAppsNode) {
                 if (node!=null){
-                    List<AccessibilityNodeInfo> runNode = node.getParent().getParent().findAccessibilityNodeInfosByText("RUN");
+                    List<AccessibilityNodeInfo> runNode = node.getParent().findAccessibilityNodeInfosByText("RUN");
                     for (AccessibilityNodeInfo node2 : runNode){
                         if (node2==null){
                             Log.i(TAG, "runNode is null ");
@@ -91,4 +106,335 @@ public class TitanActions {
         return false;
     }
 
+    // Deselect all
+    // android.widget.Button
+    public static final boolean deselectAllAction(AccessibilityNodeInfo nodeInfo){
+        if (nodeInfo == null) {
+            Log.i(TAG, "deselectAll nodeInfo is null");
+            return false;
+        }
+        List<AccessibilityNodeInfo> deselectAllNodes = nodeInfo.findAccessibilityNodeInfosByText("Deselect all");
+        if (deselectAllNodes != null && !deselectAllNodes.isEmpty()) {
+            Log.i(TAG, "deselectAll is not null");
+            for (AccessibilityNodeInfo node : deselectAllNodes) {
+                boolean performResult = node.performAction(AccessibilityNodeInfo.ACTION_CLICK);
+                if (performResult) {
+                    return true;
+                }
+            }
+        } else {
+            Log.i(TAG, "deselectAll is null");
+        }
+        return false;
+    }
+
+
+    // options
+
+
+
+    // Accounts
+    public static final boolean checkboxAccountsAction(AccessibilityNodeInfo nodeInfo){
+        if (nodeInfo == null) {
+            Log.i(TAG, "checkboxAccounts nodeInfo is null");
+            return false;
+        }
+        List<AccessibilityNodeInfo> checkboxAccountsNodes = nodeInfo.findAccessibilityNodeInfosByText(Constants.PHONE_ACCOUNT);
+        if (checkboxAccountsNodes != null && !checkboxAccountsNodes.isEmpty()) {
+            Log.i(TAG, "checkboxAccounts is not null");
+            for (AccessibilityNodeInfo node : checkboxAccountsNodes) {
+                if (node!=null){
+                    boolean performResult = node.performAction(AccessibilityNodeInfo.ACTION_CLICK);
+                    if (performResult) {
+                        return true;
+                    }
+                }
+            }
+        } else {
+            Log.i(TAG, "checkboxAccountsNodes is null");
+        }
+        return false;
+    }
+
+    // com.android.backupconfirm 4.4.4-eng.genymotion.20170320.221842
+    public static final boolean checkboxBackupconfirmAction(AccessibilityNodeInfo nodeInfo){
+        if (nodeInfo == null) {
+            Log.i(TAG, "checkboxBackupconfirm nodeInfo is null");
+            return false;
+        }
+        List<AccessibilityNodeInfo> nodes = nodeInfo.findAccessibilityNodeInfosByText(Constants.PHONE_BACKUPCONFIRM);
+        if (nodes != null && !nodes.isEmpty()) {
+            Log.i(TAG, "checkboxBackupconfirm is not null");
+            for (AccessibilityNodeInfo node : nodes) {
+                if (node!=null){
+                    boolean performResult = node.performAction(AccessibilityNodeInfo.ACTION_CLICK);
+                    if (performResult) {
+                        return true;
+                    }
+                }
+            }
+        } else {
+            Log.i(TAG, "checkboxBackupconfirm is null");
+        }
+        return false;
+    }
+
+
+    // com.android.keyguard 4.4.4-eng.genymotion.20170320.221842
+    public static final boolean checkboxKeyguardAction(AccessibilityNodeInfo nodeInfo){
+        if (nodeInfo == null) {
+            Log.i(TAG, "checkboxKeyguard nodeInfo is null");
+            return false;
+        }
+        List<AccessibilityNodeInfo> nodes = nodeInfo.findAccessibilityNodeInfosByText(Constants.PHONE_KEYGUARD);
+        if (nodes != null && !nodes.isEmpty()) {
+            Log.i(TAG, "checkboxKeyguard is not null");
+            for (AccessibilityNodeInfo node : nodes) {
+                if (node!=null){
+                    boolean performResult = node.performAction(AccessibilityNodeInfo.ACTION_CLICK);
+                    if (performResult) {
+                        return true;
+                    }
+                }
+            }
+        } else {
+            Log.i(TAG, "checkboxKeyguard is null");
+        }
+        return false;
+    }
+
+    // com.android.sharedstoragebackup 4.4.4-eng.genymotion.20170320.221842
+    public static final boolean checkboxSSBackupAction(AccessibilityNodeInfo nodeInfo){
+        if (nodeInfo == null) {
+            Log.i(TAG, "heckboxSSBackup nodeInfo is null");
+            return false;
+        }
+        List<AccessibilityNodeInfo> nodes = nodeInfo.findAccessibilityNodeInfosByText(Constants.PHONE_SHAREDSTORAGEBACKUP);
+        if (nodes != null && !nodes.isEmpty()) {
+            Log.i(TAG, "heckboxSSBackup is not null");
+            for (AccessibilityNodeInfo node : nodes) {
+                if (node!=null){
+                    boolean performResult = node.performAction(AccessibilityNodeInfo.ACTION_CLICK);
+                    if (performResult) {
+                        return true;
+                    }
+                }
+            }
+        } else {
+            Log.i(TAG, "heckboxSSBackup is null");
+        }
+        return false;
+    }
+
+
+    // Gmail 4.7.2 (967015)
+    public static final boolean checkboxGmailAction(AccessibilityNodeInfo nodeInfo){
+        if (nodeInfo == null) {
+            Log.i(TAG, "checkboxGmail nodeInfo is null");
+            return false;
+        }
+        List<AccessibilityNodeInfo> nodes = nodeInfo.findAccessibilityNodeInfosByText(Constants.PHONE_GMAIL);
+        if (nodes != null && !nodes.isEmpty()) {
+            Log.i(TAG, "checkboxGmail is not null");
+            for (AccessibilityNodeInfo node : nodes) {
+                if (node!=null){
+                    boolean performResult = node.performAction(AccessibilityNodeInfo.ACTION_CLICK);
+                    if (performResult) {
+                        return true;
+                    }
+                }
+            }
+        } else {
+            Log.i(TAG, "checkboxGmail is null");
+        }
+        return false;
+    }
+
+    // Google Account Manager 4.4.2-940549
+    public static final boolean checkboxGAMAction(AccessibilityNodeInfo nodeInfo){
+        if (nodeInfo == null) {
+            Log.i(TAG, "checkboxGAM nodeInfo is null");
+            return false;
+        }
+        List<AccessibilityNodeInfo> nodes = nodeInfo.findAccessibilityNodeInfosByText(Constants.PHONE_GAM);
+        if (nodes != null && !nodes.isEmpty()) {
+            Log.i(TAG, "checkboxGAM is not null");
+            for (AccessibilityNodeInfo node : nodes) {
+                if (node!=null){
+                    boolean performResult = node.performAction(AccessibilityNodeInfo.ACTION_CLICK);
+                    if (performResult) {
+                        return true;
+                    }
+                }
+            }
+        } else {
+            Log.i(TAG, "checkboxGAM is null");
+        }
+        return false;
+    }
+
+    // Google Backup Transport 4.4.2-940549
+    public static final boolean checkboxGBTAction(AccessibilityNodeInfo nodeInfo){
+        if (nodeInfo == null) {
+            Log.i(TAG, "checkboxGBT nodeInfo is null");
+            return false;
+        }
+        List<AccessibilityNodeInfo> nodes = nodeInfo.findAccessibilityNodeInfosByText(Constants.PHONE_GBT);
+        if (nodes != null && !nodes.isEmpty()) {
+            Log.i(TAG, "checkboxGBT is not null");
+            for (AccessibilityNodeInfo node : nodes) {
+                if (node!=null){
+                    boolean performResult = node.performAction(AccessibilityNodeInfo.ACTION_CLICK);
+                    if (performResult) {
+                        return true;
+                    }
+                }
+            }
+        } else {
+            Log.i(TAG, "checkboxGBT is null");
+        }
+        return false;
+    }
+
+    // Google Play services 10.2.98 (070-146496160)
+    public static final boolean checkboxGPSERAction(AccessibilityNodeInfo nodeInfo){
+        if (nodeInfo == null) {
+            Log.i(TAG, "checkboxGPSER nodeInfo is null");
+            return false;
+        }
+        List<AccessibilityNodeInfo> nodes = nodeInfo.findAccessibilityNodeInfosByText(Constants.PHONE_GPSER);
+        if (nodes != null && !nodes.isEmpty()) {
+            Log.i(TAG, "checkboxGPSER is not null");
+            for (AccessibilityNodeInfo node : nodes) {
+                if (node!=null){
+                    boolean performResult = node.performAction(AccessibilityNodeInfo.ACTION_CLICK);
+                    if (performResult) {
+                        return true;
+                    }
+                }
+            }
+        } else {
+            Log.i(TAG, "checkboxGPSER is null");
+        }
+        return false;
+    }
+
+
+    // Google Play Store 7.8.16.P-all [0] [PR] 155590935
+    public static final boolean checkboxGPSTOAction(AccessibilityNodeInfo nodeInfo){
+        if (nodeInfo == null) {
+            Log.i(TAG, "checkboxGPSTO nodeInfo is null");
+            return false;
+        }
+        List<AccessibilityNodeInfo> nodes = nodeInfo.findAccessibilityNodeInfosByText(Constants.PHONE_GPSTO);
+        if (nodes != null && !nodes.isEmpty()) {
+            Log.i(TAG, "checkboxGPSTO is not null");
+            for (AccessibilityNodeInfo node : nodes) {
+                if (node!=null){
+                    boolean performResult = node.performAction(AccessibilityNodeInfo.ACTION_CLICK);
+                    if (performResult) {
+                        return true;
+                    }
+                }
+            }
+        } else {
+            List<AccessibilityNodeInfo> nodes2 = nodeInfo.findAccessibilityNodeInfosByText(Constants.PHONE_GPSTO2);
+            if (nodes2 != null && !nodes2.isEmpty()) {
+                Log.i(TAG, "checkboxGPSTO is not null");
+                for (AccessibilityNodeInfo node : nodes2) {
+                    if (node != null) {
+                        boolean performResult = node.performAction(AccessibilityNodeInfo.ACTION_CLICK);
+                        if (performResult) {
+                            return true;
+                        }
+                    }
+                }
+            }
+            Log.i(TAG, "checkboxGPlus is null");
+        }
+        return false;
+    }
+
+    // Google Services Framework 4.4.2-940549
+    public static final boolean checkboxGSFAction(AccessibilityNodeInfo nodeInfo){
+        if (nodeInfo == null) {
+            Log.i(TAG, "checkboxGSF nodeInfo is null");
+            return false;
+        }
+        List<AccessibilityNodeInfo> nodes = nodeInfo.findAccessibilityNodeInfosByText(Constants.PHONE_GSF);
+        if (nodes != null && !nodes.isEmpty()) {
+            Log.i(TAG, "checkboxGSF is not null");
+            for (AccessibilityNodeInfo node : nodes) {
+                if (node!=null){
+                    boolean performResult = node.performAction(AccessibilityNodeInfo.ACTION_CLICK);
+                    if (performResult) {
+                        return true;
+                    }
+                }
+            }
+        } else {
+            Log.i(TAG, "checkboxGSF is null");
+        }
+        return false;
+    }
+
+
+    // Google+ 9.10.0.152874827
+    public static final boolean checkboxGPlusAction(AccessibilityNodeInfo nodeInfo){
+        if (nodeInfo == null) {
+            Log.i(TAG, "checkboxGPlus nodeInfo is null");
+            return false;
+        }
+        List<AccessibilityNodeInfo> nodes = nodeInfo.findAccessibilityNodeInfosByText(Constants.PHONE_GPLUS);
+        if (nodes != null && !nodes.isEmpty()) {
+            Log.i(TAG, "checkboxGPlus is not null");
+            for (AccessibilityNodeInfo node : nodes) {
+                if (node!=null){
+                    boolean performResult = node.performAction(AccessibilityNodeInfo.ACTION_CLICK);
+                    if (performResult) {
+                        return true;
+                    }
+                }
+            }
+        } else {
+            List<AccessibilityNodeInfo> nodes2 = nodeInfo.findAccessibilityNodeInfosByText(Constants.PHONE_GPLUS2);
+            if (nodes2 != null && !nodes2.isEmpty()) {
+                Log.i(TAG, "checkboxGPlus is not null");
+                for (AccessibilityNodeInfo node : nodes2) {
+                    if (node != null) {
+                        boolean performResult = node.performAction(AccessibilityNodeInfo.ACTION_CLICK);
+                        if (performResult) {
+                            return true;
+                        }
+                    }
+                }
+            }
+            Log.i(TAG, "checkboxGPlus is null");
+        }
+        return false;
+    }
+
+
+    // Settings Storage 4.4.4-eng.genymotion.20170320.221842 (SETTINGS/BLUETOOTH)
+    public static final boolean checkboxSSAction(AccessibilityNodeInfo nodeInfo){
+        if (nodeInfo == null) {
+            Log.i(TAG, "checkboxSS nodeInfo is null");
+            return false;
+        }
+        List<AccessibilityNodeInfo> nodes = nodeInfo.findAccessibilityNodeInfosByText(Constants.PHONE_SS);
+        if (nodes != null && !nodes.isEmpty()) {
+            Log.i(TAG, "checkboxSS is not null");
+            for (AccessibilityNodeInfo node : nodes) {
+                if (node!=null){
+                    boolean performResult = node.performAction(AccessibilityNodeInfo.ACTION_CLICK);
+                    if (performResult) {
+                        return true;
+                    }
+                }
+            }
+        } else {
+            Log.i(TAG, "checkboxSS is null");
+        }
+        return false;
+    }
 }
