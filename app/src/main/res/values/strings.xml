@@ -4,4 +4,5 @@
     <string name="auto_login">自动登录</string>
     <string name="auto_login_desc">Google Account Automation</string>
     <string name="start">Start</string>
+    <string name="gp">goto gp</string>
 </resources>
