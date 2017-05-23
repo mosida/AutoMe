@@ -349,6 +349,19 @@ public class TitanActions {
                         }
                     }
                 }
+            }else{
+                List<AccessibilityNodeInfo> nodes3 = nodeInfo.findAccessibilityNodeInfosByText(Constants.PHONE_GPSTO3);
+                if (nodes3 != null && !nodes3.isEmpty()) {
+                    Log.i(TAG, "checkboxGPSTO is not null");
+                    for (AccessibilityNodeInfo node : nodes3) {
+                        if (node != null) {
+                            boolean performResult = node.performAction(AccessibilityNodeInfo.ACTION_CLICK);
+                            if (performResult) {
+                                return true;
+                            }
+                        }
+                    }
+                }
             }
             Log.i(TAG, "checkboxGPlus is null");
         }

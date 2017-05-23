@@ -61,6 +61,7 @@ public class Constants {
     public static final String PHONE_GPSER = "Google Play services 10.2.98 (070-146496160)";
     public static final String PHONE_GPSTO = "Google Play Store 7.8.16.P-all [0] [PR] 155590935";
     public static final String PHONE_GPSTO2 = "Google Play Store 7.7.31.O-all [0] [PR] 153394623";
+    public static final String PHONE_GPSTO3 = "Google Play Store 7.6.08.N-all [0] [PR] 149245622";
     public static final String PHONE_GSF = "Google Services Framework 4.4.2-940549";
     public static final String PHONE_GPLUS = "Google+ 9.10.0.152874827";
     public static final String PHONE_GPLUS2 = "Google+ 9.12.0.155676601";

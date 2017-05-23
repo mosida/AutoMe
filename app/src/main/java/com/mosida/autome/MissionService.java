@@ -2,6 +2,7 @@ package com.mosida.autome;
 
 import android.app.IntentService;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Environment;
 import android.support.annotation.Nullable;
@@ -42,11 +43,16 @@ public class MissionService extends IntentService {
             Log.i(TAG, "no file for start gp!");
         }
 
-
-
-        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=com.solo.security"));
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        PackageManager packageManager = getPackageManager();
+        Intent intent = packageManager.getLaunchIntentForPackage("com.android.vending");
+        if(intent==null){
+            System.out.println("APP not found!");
+        }
         startActivity(intent);
+
+//        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=com.solo.security"));
+//        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//        startActivity(intent);
     }
 
 

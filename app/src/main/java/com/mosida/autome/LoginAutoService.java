@@ -5,12 +5,17 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Environment;
+import android.os.Message;
 import android.util.Log;
+import android.view.ViewDebug;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityNodeInfo;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 /**
  * Created by mosida on 5/7/17.
@@ -82,7 +87,6 @@ public class LoginAutoService extends AccessibilityService {
             default:
                 break;
         }
-//        startGP();
     }
 
     public static GmailInfo gmailInfo;
@@ -116,6 +120,7 @@ public class LoginAutoService extends AccessibilityService {
                     gmailInfo.comment = account[3];
                     gmailInfo.packageName = account[4];
                     gmailInfo.appCreator = account[5];
+
                     if (gmailInfo.appCreator.equals("Active")){
                         missionState = "Active";
                     }else{
@@ -143,10 +148,6 @@ public class LoginAutoService extends AccessibilityService {
                 Log.i(TAG, "TYPE_WINDOW_CONTENT_CHANGED");
                 performAutomationAction(event);
                 break;
-//            case AccessibilityEvent.TYPE_VIEW_CLICKED:
-//                Log.i(TAG, "TYPE_VIEW_CLICKED");
-//                performAutomationAction(event);
-//                break;
             default:
                 break;
         }
@@ -156,202 +157,233 @@ public class LoginAutoService extends AccessibilityService {
     @SuppressLint({"NewApi"})
     private void performAutomationAction(AccessibilityEvent event) {
 
-        AccessibilityNodeInfo nodeInfo = getRootInActiveWindow();
+        try{
+            AccessibilityNodeInfo nodeInfo = getRootInActiveWindow();
 
-        Log.i(TAG, "packageName : " + event.getPackageName().toString());
+            Log.i(TAG, "packageName : " + event.getPackageName().toString());
 
-        switch (event.getPackageName().toString()) {
-            case Constants.PACKAGE_GSF_LOGIN:
-                if (!existingAction) {
-                    existingAction = Actions.existingAction(nodeInfo);
-                } else {
-                    if (!accountAction) {
-                        accountAction = Actions.emailsAction(nodeInfo, this);
-                    }
-                    if (!pwdAction) {
-                        pwdAction = Actions.pwdAction(nodeInfo, this);
+            switch (event.getPackageName().toString()) {
+                case Constants.PACKAGE_GSF_LOGIN:
+
+//                    Actions.torAcceptAction(nodeInfo, this);
+
+                    if (!existingAction) {
+                        existingAction = Actions.existingAction(nodeInfo);
                     } else {
-                        if (!next1Action) {
-                            next1Action = Actions.next1Action(nodeInfo);
+                        if (!accountAction) {
+                            accountAction = Actions.emailsAction(nodeInfo, this);
+                        }
+                        if (!pwdAction) {
+                            pwdAction = Actions.pwdAction(nodeInfo, this);
                         } else {
-                            if (!button1Action) {
-                                button1Action = Actions.button1Action(nodeInfo);
+                            if (!next1Action) {
+                                next1Action = Actions.next1Action(nodeInfo);
                             } else {
-                                if (!next2Action) {
-                                    next2Action = Actions.next2Action(nodeInfo);
-                                }
+                                if (!button1Action) {
+                                    button1Action = Actions.button1Action(nodeInfo);
+                                } else {
+                                    if (!next2Action) {
+                                        next2Action = Actions.next2Action(nodeInfo);
+                                    }
 
-                                if (!notNowAction) {
-                                    notNowAction = Actions.notNowAction(nodeInfo);
-                                }
+                                    if (!notNowAction) {
+                                        notNowAction = Actions.notNowAction(nodeInfo);
+                                    }
 
-                                if (!signinSuccessfulAction) {
-                                    signinSuccessfulAction = Actions.existingAction(nodeInfo);
-                                }
+                                    if (!signinSuccessfulAction) {
+                                        signinSuccessfulAction = Actions.existingAction(nodeInfo);
+                                    }
 
+                                }
                             }
                         }
                     }
-                }
-                break;
-            case Constants.PACKAGE_VENDING:
-                Log.i(TAG, "PACKAGE_VENDING");
-                if (!notNowAction) {
-                    notNowAction = Actions.notNowAction(nodeInfo);
-                }
-
-                Actions.playDrawerListShowup(nodeInfo, this);
-                Actions.completeAccountSetupAction(nodeInfo);
-                Actions.retryAction(nodeInfo);
-
-                if (!getStartedAction) {
-                    getStartedAction = Actions.getStartedAction(nodeInfo, this);
-                }
-
-                if (missionState.equals("Active")){
-                    try{
-                        if (num>3){
-                            Intent intent = new Intent(this, BackupService.class);
-                            startService(intent);
-                            num=-1;
-                        }else if (num==-1){
-
-                        }else{
-                            Thread.sleep(10000);
-                            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=com.namo.telljokes"));
-                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                            startActivity(intent);
-                            num++;
-                        }
-                    }catch (Exception e){
-                        e.printStackTrace();
+                    break;
+                case Constants.PACKAGE_VENDING:
+                    Log.i(TAG, "PACKAGE_VENDING");
+                    if (!notNowAction) {
+                        notNowAction = Actions.notNowAction(nodeInfo);
                     }
-                }
 
-                if (missionState.equals("Reivew")) {
-                    if (!findAppCreatorAction) {
-                        findAppCreatorAction = Actions.findAppCreator(nodeInfo);
-                        Log.i(TAG, "findAppCreatorAction is : " + findAppCreatorAction);
+                    Actions.playDrawerListShowup(nodeInfo, this);
+                    Actions.completeAccountSetupAction(nodeInfo);
+                    Actions.retryAction(nodeInfo);
+                    Actions.torAcceptAction(nodeInfo, this);
 
+                    if (!getStartedAction) {
+                        getStartedAction = Actions.getStartedAction(nodeInfo, this);
+                    }
+
+                    if (missionState.equals("Active")){
+                        try{
+                            if (num>3){
+                                Intent intent = new Intent(this, BackupService.class);
+                                startService(intent);
+                                num=-1;
+                            }else if (num==-1){
+
+                            }else{
+                                Thread.sleep(10000);
+                                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=com.namo.telljokes"));
+                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                startActivity(intent);
+                                num++;
+                            }
+                        }catch (Exception e){
+                            e.printStackTrace();
+                        }
+                    }
+
+                    if (missionState.equals("Reivew")) {
                         if (!findAppCreatorAction) {
-                            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + gmailInfo.packageName));
-                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                            startActivity(intent);
-                        }
-                        Log.i(TAG, "findAppCreatorAction false");
-                    } else {
-                        // 下载游戏
-                        if (!downloadLargeAppAction) {
-                            Log.i(TAG, "downloadLargeAppAction");
-                            downloadLargeAppAction = Actions.downloadLargeAppAction(nodeInfo);
-                        }
+                            findAppCreatorAction = Actions.findAppCreator(nodeInfo);
+                            Log.i(TAG, "findAppCreatorAction is : " + findAppCreatorAction);
 
-
-                        // 点击下载按钮
-                        if (!installAction) {
-                            Log.i(TAG, "installAction false");
-
-                            installAction = Actions.installAction(nodeInfo);
+                            if (!findAppCreatorAction) {
+                                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + gmailInfo.packageName));
+                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                startActivity(intent);
+                            }
+                            Log.i(TAG, "findAppCreatorAction false");
                         } else {
-                            if (!acceptAction) {
-                                Log.i(TAG, "acceptAction false");
-                                acceptAction = Actions.acceptAction(nodeInfo);
-                            } else {
+                            // 下载游戏
+                            if (!downloadLargeAppAction) {
+                                Log.i(TAG, "downloadLargeAppAction");
+                                downloadLargeAppAction = Actions.downloadLargeAppAction(nodeInfo);
+                            }
 
-                                if (!cancelInstallAction) {
-                                    Log.i(TAG, "cancelInstallAction false");
-                                    cancelInstallAction = Actions.cancelDownloadAction(nodeInfo);
+
+                            // 点击下载按钮
+                            if (!installAction) {
+                                Log.i(TAG, "installAction false");
+
+                                installAction = Actions.installAction(nodeInfo);
+                            } else {
+                                if (!acceptAction) {
+                                    Log.i(TAG, "acceptAction false");
+                                    acceptAction = Actions.acceptAction(nodeInfo);
                                 } else {
-                                    if (!scrollAction) {
-                                        Log.i(TAG, "scrollAction false");
-                                        scrollAction = Actions.findReviewCard(nodeInfo);
+
+                                    if (!cancelInstallAction) {
+                                        Log.i(TAG, "cancelInstallAction false");
+                                        cancelInstallAction = Actions.cancelDownloadAction(nodeInfo);
                                     } else {
-                                        if (!submitAction) {
-                                            Log.i(TAG, "submitAction false");
-                                            submitAction = Actions.reviewAction(nodeInfo, this);
+                                        if (!scrollAction) {
+                                            Log.i(TAG, "scrollAction false");
+                                            scrollAction = Actions.findReviewCard(nodeInfo);
+                                        } else {
+                                            if (!submitAction) {
+                                                Log.i(TAG, "submitAction false");
+                                                submitAction = Actions.reviewAction(nodeInfo, this);
+                                                new Thread(){
+                                                    public void run() {
+                                                        try {
+                                                            String myUrl = "http://35.188.39.166/addReview.php?apk="+gmailInfo.getPackageName()+"&lang=en&content="+gmailInfo.comment+"&email="+gmailInfo.email;
+                                                            URL url = new URL(myUrl);
+                                                            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                                                            conn.setRequestMethod("GET");//声明请求方式 默认get
+                                                            //conn.setRequestProperty("User-Agent", "Mozilla/5.0 (Linux; U; Android 2.3.3; zh-cn; sdk Build/GRI34) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/533.1 MicroMessenger/6.0.0.57_r870003.501 NetType/internet");
+                                                            int code = conn.getResponseCode();
+                                                            if(code ==200){
+                                                                Log.i(TAG, "insert review into comment success.");
+                                                            }
+                                                        } catch (Exception e) {
+                                                            e.printStackTrace();
+                                                        }
+                                                    };
+                                                }.start();
+                                            }else{
+                                                Intent intent = new Intent(this, BackupService.class);
+                                                startService(intent);
+                                            }
                                         }
                                     }
                                 }
                             }
-                        }
 
+                        }
                     }
-                }
-                break;
-            case Constants.PACKAGE_TITAN:
-                Log.i(TAG, "PACKAGE_TITAN");
-                TitanActions.waringAction(nodeInfo);
-                if (!isCheckAction) {
-                    isCheckAction = TitanActions.checkAction(nodeInfo);
-                }
-                //                if (titanState.equals(Constants.TITAN_RESOTRE)){
-//
-//                }
-                if (titanState.equals(Constants.TITAN_BACKUP)) {
-
-
-                    if (!isBackAllAppsAction) {
-                        isBackAllAppsAction = TitanActions.backupAllAppAction(nodeInfo);
+                    break;
+                case Constants.PACKAGE_TITAN:
+                    Log.i(TAG, "PACKAGE_TITAN");
+                    TitanActions.waringAction(nodeInfo);
+                    if (!isCheckAction) {
+                        isCheckAction = TitanActions.checkAction(nodeInfo);
                     }
-                    if (!isDeselectAction) {
-                        isDeselectAction = TitanActions.deselectAllAction(nodeInfo);
-                    } else {
-                        if (!isAccountsCBAction) {
-                            isAccountsCBAction = TitanActions.checkboxAccountsAction(nodeInfo);
-                        }
-                        if (!isBackupconfirmAction) {
-                            isBackupconfirmAction = TitanActions.checkboxBackupconfirmAction(nodeInfo);
-                        }
-                        if (!isKeyguardAction) {
-                            isKeyguardAction = TitanActions.checkboxKeyguardAction(nodeInfo);
-                        }
-                        if (!isSharedstoragebackupAction) {
-                            isSharedstoragebackupAction = TitanActions.checkboxSSBackupAction(nodeInfo);
-                        }
-                        if (!isGmailAction) {
-                            isGmailAction = TitanActions.checkboxGmailAction(nodeInfo);
-                        }
-                        if (!isGAMAction) {
-                            isGAMAction = TitanActions.checkboxGAMAction(nodeInfo);
-                        }
-                        if (!isGBTAction) {
-                            isGBTAction = TitanActions.checkboxGBTAction(nodeInfo);
-                        }
-                        if (!isGPSERAction) {
-                            isGPSERAction = TitanActions.checkboxGPSERAction(nodeInfo);
-                        }
-                        if (!isGPSTOAction) {
-                            isGPSTOAction = TitanActions.checkboxGPSTOAction(nodeInfo);
-                        }
-                        if (!isGSFAction) {
-                            isGSFAction = TitanActions.checkboxGSFAction(nodeInfo);
-                        }
-                        if (!isGPlusAction) {
-                            isGPlusAction = TitanActions.checkboxGPlusAction(nodeInfo);
-                        }
-                        if (!isSSAction) {
-                            isSSAction = TitanActions.checkboxSSAction(nodeInfo);
-                        }
+                    if (titanState.equals(Constants.TITAN_RESOTRE)){
+                        /**
+                         *
+                         */
+                    }
+                    if (titanState.equals(Constants.TITAN_BACKUP)) {
 
-                        if (isAccountsCBAction && isBackupconfirmAction && isKeyguardAction
-                                && isSharedstoragebackupAction && isGmailAction
-                                && isGAMAction && isGBTAction && isGPSERAction
-                                && isGPSTOAction && isGSFAction && isGPlusAction && isSSAction) {
-                            if (!isBackupAction) {
-                                isBackupAction = TitanActions.backupAction();
-                            }
+
+                        if (!isBackAllAppsAction) {
+                            isBackAllAppsAction = TitanActions.backupAllAppAction(nodeInfo);
+                        }
+                        if (!isDeselectAction) {
+                            isDeselectAction = TitanActions.deselectAllAction(nodeInfo);
                         } else {
-                            TitanActions.scrollAction();
+                            if (!isAccountsCBAction) {
+                                isAccountsCBAction = TitanActions.checkboxAccountsAction(nodeInfo);
+                            }
+                            if (!isBackupconfirmAction) {
+                                isBackupconfirmAction = TitanActions.checkboxBackupconfirmAction(nodeInfo);
+                            }
+                            if (!isKeyguardAction) {
+                                isKeyguardAction = TitanActions.checkboxKeyguardAction(nodeInfo);
+                            }
+                            if (!isSharedstoragebackupAction) {
+                                isSharedstoragebackupAction = TitanActions.checkboxSSBackupAction(nodeInfo);
+                            }
+                            if (!isGmailAction) {
+                                isGmailAction = TitanActions.checkboxGmailAction(nodeInfo);
+                            }
+                            if (!isGAMAction) {
+                                isGAMAction = TitanActions.checkboxGAMAction(nodeInfo);
+                            }
+                            if (!isGBTAction) {
+                                isGBTAction = TitanActions.checkboxGBTAction(nodeInfo);
+                            }
+                            if (!isGPSERAction) {
+                                isGPSERAction = TitanActions.checkboxGPSERAction(nodeInfo);
+                            }
+                            if (!isGPSTOAction) {
+                                isGPSTOAction = TitanActions.checkboxGPSTOAction(nodeInfo);
+                            }
+                            if (!isGSFAction) {
+                                isGSFAction = TitanActions.checkboxGSFAction(nodeInfo);
+                            }
+                            if (!isGPlusAction) {
+                                isGPlusAction = TitanActions.checkboxGPlusAction(nodeInfo);
+                            }
+                            if (!isSSAction) {
+                                isSSAction = TitanActions.checkboxSSAction(nodeInfo);
+                            }
+
+                            if (isAccountsCBAction && isBackupconfirmAction && isKeyguardAction
+                                    && isSharedstoragebackupAction && isGmailAction
+                                    && isGAMAction && isGBTAction && isGPSERAction
+                                    && isGPSTOAction && isGSFAction && isGPlusAction && isSSAction) {
+                                if (!isBackupAction) {
+                                    isBackupAction = TitanActions.backupAction();
+                                }
+                            } else {
+                                TitanActions.scrollAction();
+                            }
+
                         }
-
                     }
-                }
-                break;
-            default:
-                Actions.torAcceptAction(nodeInfo, this);
+                    break;
+                default:
+                    Actions.torAcceptAction(nodeInfo, this);
 
-                break;
+                    break;
+            }
+        }catch (Exception e){
+            e.printStackTrace();
         }
+
     }
 
     boolean isBackupAction = false;

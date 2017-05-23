@@ -225,23 +225,25 @@ public class Actions {
             return false;
         }
 
-        List<AccessibilityNodeInfo> torAcceptNodes = nodeInfo.findAccessibilityNodeInfosByText("ACCEPT");
+        List<AccessibilityNodeInfo> torAcceptNodes = nodeInfo.findAccessibilityNodeInfosByViewId("com.android.vending:id/positive_button");
         if (torAcceptNodes != null && !torAcceptNodes.isEmpty()) {
 
             for (AccessibilityNodeInfo node : torAcceptNodes) {
-                node.performAction(AccessibilityNodeInfo.ACTION_FOCUS); // 获取焦点
-                boolean performResult = node.performAction(AccessibilityNodeInfo.ACTION_CLICK);
-                Log.i(TAG, "torAcceptNodes perform result is " + performResult);
-                if (performResult) {
-                    try {
-                        Thread.sleep(3000);
-                        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + LoginAutoService.gmailInfo.packageName));
-                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        context.startActivity(intent);
-                    }catch (Exception e){
-                        e.printStackTrace();
+                if (node!=null){
+                    node.performAction(AccessibilityNodeInfo.ACTION_FOCUS); // 获取焦点
+                    boolean performResult = node.performAction(AccessibilityNodeInfo.ACTION_CLICK);
+                    Log.i(TAG, "torAcceptNodes perform result is " + performResult);
+                    if (performResult) {
+                        try {
+                            Thread.sleep(3000);
+                            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + LoginAutoService.gmailInfo.packageName));
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            context.startActivity(intent);
+                        }catch (Exception e){
+                            e.printStackTrace();
+                        }
+                        return true;
                     }
-                    return true;
                 }
             }
         } else {
@@ -268,6 +270,12 @@ public class Actions {
                 boolean performResult = node.performAction(AccessibilityNodeInfo.ACTION_CLICK);
                 Log.i(TAG, "notNowNodes perform result is " + performResult);
                 if (performResult) {
+                    try {
+                        Thread.sleep(2000);
+                        ShellUtils.execCommand("input tap 600 750", true);
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
                     return true;
                 }
             }
