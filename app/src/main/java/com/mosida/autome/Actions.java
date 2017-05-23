@@ -690,4 +690,7 @@ public class Actions {
         }
         return false;
     }
+
+    // com.android.vending:id/review_timestamp
+    // 已经打过
 }
