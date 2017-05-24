@@ -295,24 +295,18 @@ public class Actions {
         if (nodeInfo == null) {
             return false;
         }
-
         List<AccessibilityNodeInfo> installNodes = nodeInfo.findAccessibilityNodeInfosByViewId("com.android.vending:id/buy_button");
         if (installNodes != null && !installNodes.isEmpty()) {
 
             for (AccessibilityNodeInfo node : installNodes) {
-                node.performAction(AccessibilityNodeInfo.ACTION_FOCUS); // 获取焦点
-                boolean performResult = node.performAction(AccessibilityNodeInfo.ACTION_CLICK);
-                Log.i(TAG, "installNodes perform result is " + performResult);
-                if (performResult) {
-//                        if(GmailActiveAutomationService.isGmailActiveService)
-//                        {
-//                            isInputedPassword = false;
-//                        }
-//                        node.recycle();
-                    return true;
+                if (node!=null){
+                    node.performAction(AccessibilityNodeInfo.ACTION_FOCUS); // 获取焦点
+                    boolean performResult = node.performAction(AccessibilityNodeInfo.ACTION_CLICK);
+                    Log.i(TAG, "installNodes perform result is " + performResult);
+                    if (performResult) {
+                        return true;
+                    }
                 }
-
-//                node.recycle();
             }
         } else {
             Log.i(TAG, "installNodes is null");
@@ -366,20 +360,14 @@ public class Actions {
         if (cancelNodes != null && !cancelNodes.isEmpty()) {
 
             for (AccessibilityNodeInfo node : cancelNodes) {
-                if (node.isEnabled()) {
+                if (node!=null && node.isEnabled()) {
                     node.performAction(AccessibilityNodeInfo.ACTION_FOCUS); // 获取焦点
                     boolean performResult = node.performAction(AccessibilityNodeInfo.ACTION_CLICK);
                     Log.i(TAG, "cancelNodes perform result is " + performResult);
                     if (performResult) {
-//                        if(GmailActiveAutomationService.isGmailActiveService)
-//                        {
-//                            isInputedPassword = false;
-//                        }
-//                        node.recycle();
                         return true;
                     }
                 }
-//                node.recycle();
             }
         } else {
             Log.i(TAG, "cancelNodes is null");
@@ -693,4 +681,22 @@ public class Actions {
 
     // com.android.vending:id/review_timestamp
     // 已经打过
+    public static final boolean reviewedAction(AccessibilityNodeInfo nodeInfo){
+        if (nodeInfo == null) {
+            return false;
+        }
+        List<AccessibilityNodeInfo> reviewedNodes = nodeInfo.findAccessibilityNodeInfosByViewId("com.android.vending:id/review_timestamp");
+        if (reviewedNodes != null && !reviewedNodes.isEmpty()) {
+
+            for (AccessibilityNodeInfo node : reviewedNodes) {
+                if (node!=null){
+                    Log.i(TAG, "reviewedNodes perform result is reviewed");
+                    return true;
+                }
+            }
+        } else {
+            Log.i(TAG, "reviewedNodes is null");
+        }
+        return false;
+    }
 }

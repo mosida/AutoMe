@@ -58,7 +58,13 @@ public class TitanActions {
     // backup
     public static final boolean backupAction(){
         ShellUtils.execCommand("input tap 700 100", true);
-        return false;
+        return true;
+    }
+
+    // restore
+    public static final boolean restoreAction(){
+        ShellUtils.execCommand("input tap 700 100", true);
+        return true;
     }
 
     // Scroll Action
@@ -447,6 +453,33 @@ public class TitanActions {
             }
         } else {
             Log.i(TAG, "checkboxSS is null");
+        }
+        return false;
+    }
+
+    // Restore all apps with data
+    public static final boolean restoreAllAppsWithDataAction(AccessibilityNodeInfo nodeInfo){
+        if (nodeInfo == null) {
+            Log.i(TAG, "restoreAllAppsWithData nodeInfo is null");
+            return false;
+        }
+        List<AccessibilityNodeInfo> nodes = nodeInfo.findAccessibilityNodeInfosByText("Restore all apps with data");
+        if (nodes != null && !nodes.isEmpty()) {
+            Log.i(TAG, "restoreAllAppsWithData is not null");
+            for (AccessibilityNodeInfo node : nodes) {
+                if (node!=null){
+                    AccessibilityNodeInfo runNode = node.getParent().getParent().getChild(0);
+                    if (runNode!=null){
+                        boolean performResult = node.performAction(AccessibilityNodeInfo.ACTION_CLICK);
+                        if (performResult) {
+                            return true;
+                        }
+                    }
+                }
+            }
+        } else {
+            Log.i(TAG, "restoreAllAppsWithData is null");
+            scrollAction();
         }
         return false;
     }

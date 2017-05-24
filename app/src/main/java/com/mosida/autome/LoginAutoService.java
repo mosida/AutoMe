@@ -5,15 +5,12 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Environment;
-import android.os.Message;
 import android.util.Log;
-import android.view.ViewDebug;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityNodeInfo;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
@@ -251,27 +248,30 @@ public class LoginAutoService extends AccessibilityService {
                                 Log.i(TAG, "downloadLargeAppAction");
                                 downloadLargeAppAction = Actions.downloadLargeAppAction(nodeInfo);
                             }
-
-
                             // 点击下载按钮
                             if (!installAction) {
                                 Log.i(TAG, "installAction false");
 
                                 installAction = Actions.installAction(nodeInfo);
                             } else {
-                                if (!acceptAction) {
-                                    Log.i(TAG, "acceptAction false");
+//                                if (!acceptAction) {
+//                                    Log.i(TAG, "acceptAction false");
                                     acceptAction = Actions.acceptAction(nodeInfo);
-                                } else {
+//                                } else {
 
                                     if (!cancelInstallAction) {
                                         Log.i(TAG, "cancelInstallAction false");
                                         cancelInstallAction = Actions.cancelDownloadAction(nodeInfo);
                                     } else {
+                                        isReviewed = Actions.reviewedAction(nodeInfo);
+                                        if (isReviewed == true){
+                                            break;
+                                        }
                                         if (!scrollAction) {
                                             Log.i(TAG, "scrollAction false");
                                             scrollAction = Actions.findReviewCard(nodeInfo);
                                         } else {
+
                                             if (!submitAction) {
                                                 Log.i(TAG, "submitAction false");
                                                 submitAction = Actions.reviewAction(nodeInfo, this);
@@ -307,17 +307,21 @@ public class LoginAutoService extends AccessibilityService {
                 case Constants.PACKAGE_TITAN:
                     Log.i(TAG, "PACKAGE_TITAN");
                     TitanActions.waringAction(nodeInfo);
-                    if (!isCheckAction) {
-                        isCheckAction = TitanActions.checkAction(nodeInfo);
-                    }
+
                     if (titanState.equals(Constants.TITAN_RESOTRE)){
-                        /**
-                         *
-                         */
+                        if (!isCheckRestoreAction) {
+                            isCheckRestoreAction = TitanActions.checkAction(nodeInfo);
+                        }
+                        if (!isRestoreAllAppWithDataAction){
+                            isRestoreAllAppWithDataAction = TitanActions.restoreAllAppsWithDataAction(nodeInfo);
+                        }else{
+                            TitanActions.restoreAction();
+                        }
                     }
                     if (titanState.equals(Constants.TITAN_BACKUP)) {
-
-
+                        if (!isCheckBackupAction) {
+                            isCheckBackupAction = TitanActions.checkAction(nodeInfo);
+                        }
                         if (!isBackAllAppsAction) {
                             isBackAllAppsAction = TitanActions.backupAllAppAction(nodeInfo);
                         }
@@ -386,9 +390,12 @@ public class LoginAutoService extends AccessibilityService {
 
     }
 
+    boolean isRestoreAllAppWithDataAction = false;
     boolean isBackupAction = false;
     boolean isBackAllAppsAction = false;
-    boolean isCheckAction = false;
+    boolean isCheckBackupAction = false;
+    boolean isCheckRestoreAction = false;
+    boolean isCheckReBackupAction = false;
     boolean isDeselectAction = false;
     boolean isAccountsCBAction = false;
     boolean isBackupconfirmAction = false;
@@ -402,7 +409,7 @@ public class LoginAutoService extends AccessibilityService {
     boolean isGSFAction = false;
     boolean isGPlusAction = false;
     boolean isSSAction = false;
-
+    boolean isReviewed = false;
 
     @Override
     public void onInterrupt() {
