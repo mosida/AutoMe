@@ -13,6 +13,33 @@ public class TitanActions {
 
     public static final String TAG = "TitanActions";
 
+
+    // OK
+    public static final boolean errorAction(AccessibilityNodeInfo nodeInfo) {
+        if (nodeInfo == null) {
+            Log.i(TAG, "errorNodes nodeInfo is null");
+            return false;
+        }
+        List<AccessibilityNodeInfo> warningNodes = nodeInfo.findAccessibilityNodeInfosByViewId("android:id/button1");
+        if (warningNodes != null && !warningNodes.isEmpty()) {
+            Log.i(TAG, "errorNodes is not null");
+            for (AccessibilityNodeInfo node : warningNodes) {
+                if (node!=null){
+                    boolean performResult = node.performAction(AccessibilityNodeInfo.ACTION_CLICK);
+                    if (performResult) {
+                        return true;
+                    }
+                }
+            }
+        } else {
+            Log.i(TAG, "errorNodes is null");
+        }
+        return false;
+    }
+
+
+
+
     // OK
     // android:id/button3
     // android.widget.Button
@@ -26,9 +53,11 @@ public class TitanActions {
         if (warningNodes != null && !warningNodes.isEmpty()) {
             Log.i(TAG, "warningNodes is not null");
             for (AccessibilityNodeInfo node : warningNodes) {
-                boolean performResult = node.performAction(AccessibilityNodeInfo.ACTION_CLICK);
-                if (performResult) {
-                    return true;
+                if (node!=null){
+                    boolean performResult = node.performAction(AccessibilityNodeInfo.ACTION_CLICK);
+                    if (performResult) {
+                        return true;
+                    }
                 }
             }
         } else {
@@ -135,8 +164,37 @@ public class TitanActions {
     }
 
 
-    // options
+    // Forced redo of your backups
+    public static final boolean forcedredoyourbackupsAction(AccessibilityNodeInfo nodeInfo){
+        if (nodeInfo == null) {
+            Log.i(TAG, "forcedredoyourbackups nodeInfo is null");
+            return false;
+        }
+        List<AccessibilityNodeInfo> backupAppsNode = nodeInfo.findAccessibilityNodeInfosByText("Forced redo of your backups");
+        if (backupAppsNode != null && !backupAppsNode.isEmpty()) {
+            Log.i(TAG, "forcedredoyourbackups is not null");
+            for (AccessibilityNodeInfo node : backupAppsNode) {
+                if (node!=null){
+                    List<AccessibilityNodeInfo> runNode = node.getParent().findAccessibilityNodeInfosByText("RUN");
+                    for (AccessibilityNodeInfo node2 : runNode){
+                        if (node2==null){
+                            Log.i(TAG, "runNode is null ");
 
+                        }else{
+                            boolean performResult = node2.performAction(AccessibilityNodeInfo.ACTION_CLICK);
+                            Log.i(TAG, "runNode is not null : "+performResult);
+                        }
+                        return true;
+                    }
+                }else{
+                    Log.i(TAG, "forcedredoyourbackups is null");
+                }
+            }
+        } else {
+            Log.i(TAG, "forcedredoyourbackups is null");
+        }
+        return false;
+    }
 
 
     // Accounts
@@ -468,13 +526,19 @@ public class TitanActions {
             Log.i(TAG, "restoreAllAppsWithData is not null");
             for (AccessibilityNodeInfo node : nodes) {
                 if (node!=null){
-                    AccessibilityNodeInfo runNode = node.getParent().getParent().getChild(0);
-                    if (runNode!=null){
-                        boolean performResult = node.performAction(AccessibilityNodeInfo.ACTION_CLICK);
-                        if (performResult) {
-                            return true;
+                    List<AccessibilityNodeInfo> runNode = node.getParent().findAccessibilityNodeInfosByText("RUN");
+                    for (AccessibilityNodeInfo node2 : runNode){
+                        if (node2==null){
+                            Log.i(TAG, "runNode is null ");
+
+                        }else{
+                            boolean performResult = node2.performAction(AccessibilityNodeInfo.ACTION_CLICK);
+                            Log.i(TAG, "runNode is not null : "+performResult);
                         }
+                        return true;
                     }
+                }else{
+                    Log.i(TAG, "forcedredoyourbackups is null");
                 }
             }
         } else {
@@ -483,4 +547,6 @@ public class TitanActions {
         }
         return false;
     }
+
+
 }

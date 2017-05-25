@@ -13,6 +13,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLEncoder;
 
 /**
  * Created by mosida on 5/7/17.
@@ -31,6 +32,7 @@ public class LoginAutoService extends AccessibilityService {
 
     public static int num = 0;
 
+    public static boolean originLogin = false;
     // node Actions
     private boolean findAppCreatorAction = false;
     private boolean installAction = false;
@@ -38,7 +40,7 @@ public class LoginAutoService extends AccessibilityService {
     private boolean scrollAction = false;
     private boolean submitAction = false;
     private boolean acceptAction = false;
-//    private boolean torAcceptAction = false;
+    //    private boolean torAcceptAction = false;
     private boolean notNowAction = false;
     private boolean signinSuccessfulAction = false;
     private boolean downloadLargeAppAction = false;
@@ -92,12 +94,12 @@ public class LoginAutoService extends AccessibilityService {
     @Override
     public void onAccessibilityEvent(AccessibilityEvent event) {
 
-        if (gmailInfo==null){
+        if (gmailInfo == null) {
             File file = new File(Environment.getExternalStorageDirectory(),
                     Constants.accountFile);
-            if (file.exists()){
+            if (file.exists()) {
                 Log.i(TAG, "file.exists!");
-            }else{
+            } else {
                 Log.i(TAG, "no file for start gp!");
                 return;
             }
@@ -108,7 +110,7 @@ public class LoginAutoService extends AccessibilityService {
                     byte[] b = new byte[inputStream.available()];
                     inputStream.read(b);
                     String result = new String(b);
-                    Log.i(TAG, "file data is : "+ result);
+                    Log.i(TAG, "file data is : " + result);
                     String[] account = result.split(",");
                     gmailInfo = new GmailInfo();
                     gmailInfo.email = account[0];
@@ -118,9 +120,9 @@ public class LoginAutoService extends AccessibilityService {
                     gmailInfo.packageName = account[4];
                     gmailInfo.appCreator = account[5];
 
-                    if (gmailInfo.appCreator.equals("Active")){
+                    if (gmailInfo.appCreator.equals("Active")) {
                         missionState = "Active";
-                    }else{
+                    } else {
                         missionState = "Reivew";
                     }
                 } catch (Exception e) {
@@ -154,7 +156,7 @@ public class LoginAutoService extends AccessibilityService {
     @SuppressLint({"NewApi"})
     private void performAutomationAction(AccessibilityEvent event) {
 
-        try{
+        try {
             AccessibilityNodeInfo nodeInfo = getRootInActiveWindow();
 
             Log.i(TAG, "packageName : " + event.getPackageName().toString());
@@ -163,6 +165,7 @@ public class LoginAutoService extends AccessibilityService {
                 case Constants.PACKAGE_GSF_LOGIN:
 
 //                    Actions.torAcceptAction(nodeInfo, this);
+                    originLogin = true;
 
                     if (!existingAction) {
                         existingAction = Actions.existingAction(nodeInfo);
@@ -211,22 +214,22 @@ public class LoginAutoService extends AccessibilityService {
                         getStartedAction = Actions.getStartedAction(nodeInfo, this);
                     }
 
-                    if (missionState.equals("Active")){
-                        try{
-                            if (num>3){
+                    if (missionState.equals("Active")) {
+                        try {
+                            if (num > 3) {
                                 Intent intent = new Intent(this, BackupService.class);
                                 startService(intent);
-                                num=-1;
-                            }else if (num==-1){
+                                num = -1;
+                            } else if (num == -1) {
 
-                            }else{
+                            } else {
                                 Thread.sleep(10000);
                                 Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=com.namo.telljokes"));
                                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                                 startActivity(intent);
                                 num++;
                             }
-                        }catch (Exception e){
+                        } catch (Exception e) {
                             e.printStackTrace();
                         }
                     }
@@ -254,53 +257,42 @@ public class LoginAutoService extends AccessibilityService {
 
                                 installAction = Actions.installAction(nodeInfo);
                             } else {
-//                                if (!acceptAction) {
-//                                    Log.i(TAG, "acceptAction false");
-                                    acceptAction = Actions.acceptAction(nodeInfo);
-//                                } else {
+                                acceptAction = Actions.acceptAction(nodeInfo);
 
-                                    if (!cancelInstallAction) {
-                                        Log.i(TAG, "cancelInstallAction false");
-                                        cancelInstallAction = Actions.cancelDownloadAction(nodeInfo);
+                                if (!cancelInstallAction) {
+                                    Log.i(TAG, "cancelInstallAction false");
+                                    cancelInstallAction = Actions.cancelDownloadAction(nodeInfo);
+                                } else {
+                                    isReviewed = Actions.reviewedAction(nodeInfo);
+                                    if (isReviewed == true) {
+                                        break;
+                                    }
+                                    if (!scrollAction) {
+                                        Log.i(TAG, "scrollAction false");
+                                        scrollAction = Actions.findReviewCard(nodeInfo);
                                     } else {
-                                        isReviewed = Actions.reviewedAction(nodeInfo);
-                                        if (isReviewed == true){
-                                            break;
-                                        }
-                                        if (!scrollAction) {
-                                            Log.i(TAG, "scrollAction false");
-                                            scrollAction = Actions.findReviewCard(nodeInfo);
-                                        } else {
 
-                                            if (!submitAction) {
-                                                Log.i(TAG, "submitAction false");
-                                                submitAction = Actions.reviewAction(nodeInfo, this);
-                                                new Thread(){
-                                                    public void run() {
-                                                        try {
-                                                            String myUrl = "http://35.188.39.166/addReview.php?apk="+gmailInfo.getPackageName()+"&lang=en&content="+gmailInfo.comment+"&email="+gmailInfo.email;
-                                                            URL url = new URL(myUrl);
-                                                            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                                                            conn.setRequestMethod("GET");//声明请求方式 默认get
-                                                            //conn.setRequestProperty("User-Agent", "Mozilla/5.0 (Linux; U; Android 2.3.3; zh-cn; sdk Build/GRI34) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/533.1 MicroMessenger/6.0.0.57_r870003.501 NetType/internet");
-                                                            int code = conn.getResponseCode();
-                                                            if(code ==200){
-                                                                Log.i(TAG, "insert review into comment success.");
-                                                            }
-                                                        } catch (Exception e) {
-                                                            e.printStackTrace();
-                                                        }
-                                                    };
-                                                }.start();
-                                            }else{
-                                                Intent intent = new Intent(this, BackupService.class);
-                                                startService(intent);
-                                            }
+                                        if (!submitAction) {
+                                            Log.i(TAG, "submitAction false");
+                                            submitAction = Actions.reviewAction(nodeInfo, this);
+                                            new Thread() {
+                                                public void run() {
+                                                    try {
+                                                        String encodeContent = URLEncoder.encode(gmailInfo.getComment(), "UTF-8");
+                                                        String myUrl = "http://35.188.39.166/addReview.php?apk=" + gmailInfo.getPackageName() + "&lang="+lang+"&content=" + encodeContent + "&email=" + gmailInfo.email;
+                                                        HttpUtils.httpGet(myUrl);
+                                                    } catch (Exception e) {
+                                                        e.printStackTrace();
+                                                    }
+                                                }
+                                            }.start();
+                                        } else {
+                                            Intent intent = new Intent(this, BackupService.class);
+                                            startService(intent);
                                         }
                                     }
                                 }
                             }
-
                         }
                     }
                     break;
@@ -308,13 +300,13 @@ public class LoginAutoService extends AccessibilityService {
                     Log.i(TAG, "PACKAGE_TITAN");
                     TitanActions.waringAction(nodeInfo);
 
-                    if (titanState.equals(Constants.TITAN_RESOTRE)){
+                    if (titanState.equals(Constants.TITAN_RESOTRE)) {
                         if (!isCheckRestoreAction) {
                             isCheckRestoreAction = TitanActions.checkAction(nodeInfo);
                         }
-                        if (!isRestoreAllAppWithDataAction){
+                        if (!isRestoreAllAppWithDataAction) {
                             isRestoreAllAppWithDataAction = TitanActions.restoreAllAppsWithDataAction(nodeInfo);
-                        }else{
+                        } else {
                             TitanActions.restoreAction();
                         }
                     }
@@ -322,69 +314,77 @@ public class LoginAutoService extends AccessibilityService {
                         if (!isCheckBackupAction) {
                             isCheckBackupAction = TitanActions.checkAction(nodeInfo);
                         }
-                        if (!isBackAllAppsAction) {
-                            isBackAllAppsAction = TitanActions.backupAllAppAction(nodeInfo);
-                        }
-                        if (!isDeselectAction) {
-                            isDeselectAction = TitanActions.deselectAllAction(nodeInfo);
-                        } else {
-                            if (!isAccountsCBAction) {
-                                isAccountsCBAction = TitanActions.checkboxAccountsAction(nodeInfo);
+                        if (originLogin==true){
+                            if (!isBackAllAppsAction) {
+                                isBackAllAppsAction = TitanActions.backupAllAppAction(nodeInfo);
                             }
-                            if (!isBackupconfirmAction) {
-                                isBackupconfirmAction = TitanActions.checkboxBackupconfirmAction(nodeInfo);
-                            }
-                            if (!isKeyguardAction) {
-                                isKeyguardAction = TitanActions.checkboxKeyguardAction(nodeInfo);
-                            }
-                            if (!isSharedstoragebackupAction) {
-                                isSharedstoragebackupAction = TitanActions.checkboxSSBackupAction(nodeInfo);
-                            }
-                            if (!isGmailAction) {
-                                isGmailAction = TitanActions.checkboxGmailAction(nodeInfo);
-                            }
-                            if (!isGAMAction) {
-                                isGAMAction = TitanActions.checkboxGAMAction(nodeInfo);
-                            }
-                            if (!isGBTAction) {
-                                isGBTAction = TitanActions.checkboxGBTAction(nodeInfo);
-                            }
-                            if (!isGPSERAction) {
-                                isGPSERAction = TitanActions.checkboxGPSERAction(nodeInfo);
-                            }
-                            if (!isGPSTOAction) {
-                                isGPSTOAction = TitanActions.checkboxGPSTOAction(nodeInfo);
-                            }
-                            if (!isGSFAction) {
-                                isGSFAction = TitanActions.checkboxGSFAction(nodeInfo);
-                            }
-                            if (!isGPlusAction) {
-                                isGPlusAction = TitanActions.checkboxGPlusAction(nodeInfo);
-                            }
-                            if (!isSSAction) {
-                                isSSAction = TitanActions.checkboxSSAction(nodeInfo);
-                            }
-
-                            if (isAccountsCBAction && isBackupconfirmAction && isKeyguardAction
-                                    && isSharedstoragebackupAction && isGmailAction
-                                    && isGAMAction && isGBTAction && isGPSERAction
-                                    && isGPSTOAction && isGSFAction && isGPlusAction && isSSAction) {
-                                if (!isBackupAction) {
-                                    isBackupAction = TitanActions.backupAction();
-                                }
+                            if (!isDeselectAction) {
+                                isDeselectAction = TitanActions.deselectAllAction(nodeInfo);
                             } else {
-                                TitanActions.scrollAction();
+                                if (!isAccountsCBAction) {
+                                    isAccountsCBAction = TitanActions.checkboxAccountsAction(nodeInfo);
+                                }
+                                if (!isBackupconfirmAction) {
+                                    isBackupconfirmAction = TitanActions.checkboxBackupconfirmAction(nodeInfo);
+                                }
+                                if (!isKeyguardAction) {
+                                    isKeyguardAction = TitanActions.checkboxKeyguardAction(nodeInfo);
+                                }
+                                if (!isSharedstoragebackupAction) {
+                                    isSharedstoragebackupAction = TitanActions.checkboxSSBackupAction(nodeInfo);
+                                }
+                                if (!isGmailAction) {
+                                    isGmailAction = TitanActions.checkboxGmailAction(nodeInfo);
+                                }
+                                if (!isGAMAction) {
+                                    isGAMAction = TitanActions.checkboxGAMAction(nodeInfo);
+                                }
+                                if (!isGBTAction) {
+                                    isGBTAction = TitanActions.checkboxGBTAction(nodeInfo);
+                                }
+                                if (!isGPSERAction) {
+                                    isGPSERAction = TitanActions.checkboxGPSERAction(nodeInfo);
+                                }
+                                if (!isGPSTOAction) {
+                                    isGPSTOAction = TitanActions.checkboxGPSTOAction(nodeInfo);
+                                }
+                                if (!isGSFAction) {
+                                    isGSFAction = TitanActions.checkboxGSFAction(nodeInfo);
+                                }
+                                if (!isGPlusAction) {
+                                    isGPlusAction = TitanActions.checkboxGPlusAction(nodeInfo);
+                                }
+                                if (!isSSAction) {
+                                    isSSAction = TitanActions.checkboxSSAction(nodeInfo);
+                                }
+
+                                if (isAccountsCBAction && isBackupconfirmAction && isKeyguardAction
+                                        && isSharedstoragebackupAction && isGmailAction
+                                        && isGAMAction && isGBTAction && isGPSERAction
+                                        && isGPSTOAction && isGSFAction && isGPlusAction && isSSAction) {
+                                    if (!isBackupAction) {
+                                        isBackupAction = TitanActions.backupAction();
+                                    }
+                                } else {
+                                    TitanActions.scrollAction();
+                                }
                             }
 
+                        }else{
+                            if (!isForcedredoofyourbackups){
+                                isForcedredoofyourbackups = TitanActions.forcedredoyourbackupsAction(nodeInfo);
+                            }else{
+                                isCheckReBackupAction = TitanActions.backupAction();
+                            }
                         }
                     }
                     break;
                 default:
                     Actions.torAcceptAction(nodeInfo, this);
-
+                    TitanActions.errorAction(nodeInfo);
                     break;
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -395,7 +395,6 @@ public class LoginAutoService extends AccessibilityService {
     boolean isBackAllAppsAction = false;
     boolean isCheckBackupAction = false;
     boolean isCheckRestoreAction = false;
-    boolean isCheckReBackupAction = false;
     boolean isDeselectAction = false;
     boolean isAccountsCBAction = false;
     boolean isBackupconfirmAction = false;
@@ -410,6 +409,9 @@ public class LoginAutoService extends AccessibilityService {
     boolean isGPlusAction = false;
     boolean isSSAction = false;
     boolean isReviewed = false;
+    boolean isForcedredoofyourbackups = false;
+    boolean isCheckReBackupAction = false;
+
 
     @Override
     public void onInterrupt() {
