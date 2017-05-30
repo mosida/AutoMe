@@ -54,10 +54,14 @@ public class LoginAutoService extends AccessibilityService {
     public static String reviewFinishButtonNodeName;
     public static String tellNodeName;
     public static String yesNodeName;
+    // titan node name
+    public static String backupNodeName;
+    public static String runNdoeName;
+    public static String deselectAllNodeName;
+    public static String forceRedoBackupNodeName;
+    public static String restoreAllAppsWithDataNodeName;
 
     private static String lang;
-
-
     public static String titanState = Constants.TITAN_BACKUP;
 
 
@@ -73,7 +77,12 @@ public class LoginAutoService extends AccessibilityService {
                 reviewContinueButtonNodeName = Constants.REVIEWCONTINUEBUTTON_NODE_NAME_ZH;
                 reviewFinishButtonNodeName = Constants.REVIEWFINISHBUTTON_NODE_NAME_ZH;
                 tellNodeName = Constants.TELL_NODE_NAME_ZH;
-                yesNodeName = Constants.YES_NODE_NAME_Zh;
+                yesNodeName = Constants.YES_NODE_NAME_ZH;
+                backupNodeName = Constants.BACKUP_ALL_YOUR_FILES_ZH;
+                runNdoeName = Constants.RUN_ZH;
+                deselectAllNodeName = Constants.DESELECT_ALL_ZH;
+                forceRedoBackupNodeName = Constants.FORCE_DO_YOUR_BACKUP_ZH;
+                restoreAllAppsWithDataNodeName = Constants.RESTORE_ALL_APPS_WITH_DATA_ZH;
                 break;
             case Constants.LANG_EN:
                 emailNodeName = Constants.EMAIL_NODE_NAME_EN;
@@ -82,6 +91,11 @@ public class LoginAutoService extends AccessibilityService {
                 reviewFinishButtonNodeName = Constants.REVIEWFINISHBUTTON_NODE_NAME_EN;
                 tellNodeName = Constants.TELL_NODE_NAME_EN;
                 yesNodeName = Constants.YES_NODE_NAME_EN;
+                backupNodeName = Constants.BACKUP_ALL_YOUR_FILES_EN;
+                runNdoeName = Constants.RUN_EN;
+                deselectAllNodeName = Constants.DESELECT_ALL_EN;
+                forceRedoBackupNodeName = Constants.FORCE_DO_YOUR_BACKUP_EN;
+                restoreAllAppsWithDataNodeName = Constants.RESTORE_ALL_APPS_WITH_DATA_EN;
                 break;
             default:
                 break;
@@ -163,38 +177,22 @@ public class LoginAutoService extends AccessibilityService {
 
             switch (event.getPackageName().toString()) {
                 case Constants.PACKAGE_GSF_LOGIN:
-
-//                    Actions.torAcceptAction(nodeInfo, this);
                     originLogin = true;
+                    existingAction = Actions.next_buttonAction(nodeInfo);
 
-                    if (!existingAction) {
-                        existingAction = Actions.existingAction(nodeInfo);
+                    if (!accountAction) {
+                        accountAction = Actions.emailsAction(nodeInfo, this);
+                    }
+                    if (!pwdAction) {
+                        pwdAction = Actions.pwdAction(nodeInfo, this);
                     } else {
-                        if (!accountAction) {
-                            accountAction = Actions.emailsAction(nodeInfo, this);
-                        }
-                        if (!pwdAction) {
-                            pwdAction = Actions.pwdAction(nodeInfo, this);
+
+                        if (!button1Action) {
+                            button1Action = Actions.button1Action(nodeInfo);
                         } else {
-                            if (!next1Action) {
-                                next1Action = Actions.next1Action(nodeInfo);
-                            } else {
-                                if (!button1Action) {
-                                    button1Action = Actions.button1Action(nodeInfo);
-                                } else {
-                                    if (!next2Action) {
-                                        next2Action = Actions.next2Action(nodeInfo);
-                                    }
 
-                                    if (!notNowAction) {
-                                        notNowAction = Actions.notNowAction(nodeInfo);
-                                    }
-
-                                    if (!signinSuccessfulAction) {
-                                        signinSuccessfulAction = Actions.existingAction(nodeInfo);
-                                    }
-
-                                }
+                            if (!notNowAction) {
+                                notNowAction = Actions.notNowAction(nodeInfo);
                             }
                         }
                     }
@@ -254,7 +252,6 @@ public class LoginAutoService extends AccessibilityService {
                             // 点击下载按钮
                             if (!installAction) {
                                 Log.i(TAG, "installAction false");
-
                                 installAction = Actions.installAction(nodeInfo);
                             } else {
                                 acceptAction = Actions.acceptAction(nodeInfo);
@@ -279,17 +276,18 @@ public class LoginAutoService extends AccessibilityService {
                                                 public void run() {
                                                     try {
                                                         String encodeContent = URLEncoder.encode(gmailInfo.getComment(), "UTF-8");
-                                                        String myUrl = "http://35.188.39.166/addReview.php?apk=" + gmailInfo.getPackageName() + "&lang="+lang+"&content=" + encodeContent + "&email=" + gmailInfo.email;
+                                                        String myUrl = "http://35.188.39.166/addReview.php?apk=" + gmailInfo.getPackageName() + "&lang=" + lang + "&content=" + encodeContent + "&email=" + gmailInfo.email;
                                                         HttpUtils.httpGet(myUrl);
                                                     } catch (Exception e) {
                                                         e.printStackTrace();
                                                     }
                                                 }
                                             }.start();
-                                        } else {
-                                            Intent intent = new Intent(this, BackupService.class);
-                                            startService(intent);
                                         }
+//                                        else {
+//                                            Intent intent = new Intent(this, BackupService.class);
+//                                            startService(intent);
+//                                        }
                                     }
                                 }
                             }
@@ -314,7 +312,7 @@ public class LoginAutoService extends AccessibilityService {
                         if (!isCheckBackupAction) {
                             isCheckBackupAction = TitanActions.checkAction(nodeInfo);
                         }
-                        if (originLogin==true){
+                        if (originLogin == true) {
                             if (!isBackAllAppsAction) {
                                 isBackAllAppsAction = TitanActions.backupAllAppAction(nodeInfo);
                             }
@@ -370,10 +368,10 @@ public class LoginAutoService extends AccessibilityService {
                                 }
                             }
 
-                        }else{
-                            if (!isForcedredoofyourbackups){
+                        } else {
+                            if (!isForcedredoofyourbackups) {
                                 isForcedredoofyourbackups = TitanActions.forcedredoyourbackupsAction(nodeInfo);
-                            }else{
+                            } else {
                                 isCheckReBackupAction = TitanActions.backupAction();
                             }
                         }

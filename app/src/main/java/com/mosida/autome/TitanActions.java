@@ -114,12 +114,12 @@ public class TitanActions {
             Log.i(TAG, "backupAllAppAction nodeInfo is null");
             return false;
         }
-        List<AccessibilityNodeInfo> backupAppsNode = nodeInfo.findAccessibilityNodeInfosByText("Backup all user apps + system data");
+        List<AccessibilityNodeInfo> backupAppsNode = nodeInfo.findAccessibilityNodeInfosByText(LoginAutoService.backupNodeName);
         if (backupAppsNode != null && !backupAppsNode.isEmpty()) {
             Log.i(TAG, "backupAppsNode is not null");
             for (AccessibilityNodeInfo node : backupAppsNode) {
                 if (node!=null){
-                    List<AccessibilityNodeInfo> runNode = node.getParent().findAccessibilityNodeInfosByText("RUN");
+                    List<AccessibilityNodeInfo> runNode = node.getParent().findAccessibilityNodeInfosByText(LoginAutoService.runNdoeName);
                     for (AccessibilityNodeInfo node2 : runNode){
                         if (node2==null){
                             Log.i(TAG, "runNode is null ");
@@ -148,7 +148,7 @@ public class TitanActions {
             Log.i(TAG, "deselectAll nodeInfo is null");
             return false;
         }
-        List<AccessibilityNodeInfo> deselectAllNodes = nodeInfo.findAccessibilityNodeInfosByText("Deselect all");
+        List<AccessibilityNodeInfo> deselectAllNodes = nodeInfo.findAccessibilityNodeInfosByText(LoginAutoService.deselectAllNodeName);
         if (deselectAllNodes != null && !deselectAllNodes.isEmpty()) {
             Log.i(TAG, "deselectAll is not null");
             for (AccessibilityNodeInfo node : deselectAllNodes) {
@@ -170,12 +170,12 @@ public class TitanActions {
             Log.i(TAG, "forcedredoyourbackups nodeInfo is null");
             return false;
         }
-        List<AccessibilityNodeInfo> backupAppsNode = nodeInfo.findAccessibilityNodeInfosByText("Forced redo of your backups");
+        List<AccessibilityNodeInfo> backupAppsNode = nodeInfo.findAccessibilityNodeInfosByText(LoginAutoService.forceRedoBackupNodeName);
         if (backupAppsNode != null && !backupAppsNode.isEmpty()) {
             Log.i(TAG, "forcedredoyourbackups is not null");
             for (AccessibilityNodeInfo node : backupAppsNode) {
                 if (node!=null){
-                    List<AccessibilityNodeInfo> runNode = node.getParent().findAccessibilityNodeInfosByText("RUN");
+                    List<AccessibilityNodeInfo> runNode = node.getParent().findAccessibilityNodeInfosByText(LoginAutoService.runNdoeName);
                     for (AccessibilityNodeInfo node2 : runNode){
                         if (node2==null){
                             Log.i(TAG, "runNode is null ");
@@ -521,12 +521,12 @@ public class TitanActions {
             Log.i(TAG, "restoreAllAppsWithData nodeInfo is null");
             return false;
         }
-        List<AccessibilityNodeInfo> nodes = nodeInfo.findAccessibilityNodeInfosByText("Restore all apps with data");
+        List<AccessibilityNodeInfo> nodes = nodeInfo.findAccessibilityNodeInfosByText(LoginAutoService.restoreAllAppsWithDataNodeName);
         if (nodes != null && !nodes.isEmpty()) {
             Log.i(TAG, "restoreAllAppsWithData is not null");
             for (AccessibilityNodeInfo node : nodes) {
                 if (node!=null){
-                    List<AccessibilityNodeInfo> runNode = node.getParent().findAccessibilityNodeInfosByText("RUN");
+                    List<AccessibilityNodeInfo> runNode = node.getParent().findAccessibilityNodeInfosByText(LoginAutoService.runNdoeName);
                     for (AccessibilityNodeInfo node2 : runNode){
                         if (node2==null){
                             Log.i(TAG, "runNode is null ");
