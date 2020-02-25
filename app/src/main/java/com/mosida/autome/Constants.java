@@ -19,13 +19,23 @@ public class Constants {
     public static final String PACKAGE_TITAN = "com.keramidas.TitaniumBackup";
 
     public static final String LANG_ZH = "zh";
-    public static final String EMAIL_NODE_NAME_ZH = "電子郵件";
-    public static final String PWD_NODE_NAME_ZH = "密碼";
+//    public static final String EMAIL_NODE_NAME_ZH = "電子郵件";
+//    public static final String PWD_NODE_NAME_ZH = "密碼";
+//    public static final String REVIEWCONTINUEBUTTON_NODE_NAME_ZH = "提交";
+//    public static final String TELL_NODE_NAME_ZH = "請將您的想法告訴我們";
+//    public static final String REVIEWFINISHBUTTON_NODE_NAME_ZH = "完成";
+//    public static final String YES_NODE_NAME_Zh = "Yes";
+    public static final String EMAIL_NODE_NAME_ZH = "电子邮件";
+    public static final String PWD_NODE_NAME_ZH = "密码";
     public static final String REVIEWCONTINUEBUTTON_NODE_NAME_ZH = "提交";
-    public static final String TELL_NODE_NAME_ZH = "請將您的想法告訴我們";
+    public static final String TELL_NODE_NAME_ZH = "请告诉我们您的想法";
     public static final String REVIEWFINISHBUTTON_NODE_NAME_ZH = "完成";
-    public static final String YES_NODE_NAME_Zh = "Yes";
-
+    public static final String YES_NODE_NAME_ZH = "Yes";
+    public static final String BACKUP_ALL_YOUR_FILES_ZH = "备份所有用户程序 + 系统数据";
+    public static final String RUN_ZH = "运行";
+    public static final String DESELECT_ALL_ZH = "反选全部";
+    public static final String FORCE_DO_YOUR_BACKUP_ZH = "强制重做备份";
+    public static final String RESTORE_ALL_APPS_WITH_DATA_ZH = "恢复所有程序及其数据";
 
     public static final String LANG_EN = "en";
     public static final String EMAIL_NODE_NAME_EN = "Email";
@@ -34,6 +44,11 @@ public class Constants {
     public static final String TELL_NODE_NAME_EN = "Tell us what you think";
     public static final String REVIEWFINISHBUTTON_NODE_NAME_EN = "Finish";
     public static final String YES_NODE_NAME_EN = "Yes";
+    public static final String BACKUP_ALL_YOUR_FILES_EN = "Backup all user apps + system data";
+    public static final String RUN_EN = "RUN";
+    public static final String DESELECT_ALL_EN = "Deselect all";
+    public static final String FORCE_DO_YOUR_BACKUP_EN = "Forced redo of your backups";
+    public static final String RESTORE_ALL_APPS_WITH_DATA_EN = "Restore all apps with data";
 
 
     public static final String TITAN_BACKUP = "backup";

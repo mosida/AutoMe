@@ -20,7 +20,7 @@ public class Actions {
     // Existing
     // com.google.android.gsf.login:id/next_button
     // android.widget.Button
-    public static final boolean existingAction(AccessibilityNodeInfo nodeInfo) {
+    public static final boolean next_buttonAction(AccessibilityNodeInfo nodeInfo) {
         if (nodeInfo == null) {
             return false;
         }
@@ -28,13 +28,15 @@ public class Actions {
         if (existingNodes != null && !existingNodes.isEmpty()) {
 
             for (AccessibilityNodeInfo node : existingNodes) {
-                boolean performResult = node.performAction(AccessibilityNodeInfo.ACTION_CLICK);
-                if (performResult) {
-                    return true;
+                if (node!=null){
+                    boolean performResult = node.performAction(AccessibilityNodeInfo.ACTION_CLICK);
+                    if (performResult) {
+                        return true;
+                    }
                 }
             }
         } else {
-            Log.i(TAG, "existingNodes is null");
+            Log.i(TAG, "next_buttonAction is null");
         }
         return false;
     }
@@ -121,34 +123,34 @@ public class Actions {
     // next1
     // com.google.android.gsf.login:id/next_button
     // android.widget.Button
-    public static final boolean next1Action(AccessibilityNodeInfo nodeInfo) {
-        if (nodeInfo == null) {
-            return false;
-        }
-        List<AccessibilityNodeInfo> next1Nodes = nodeInfo.findAccessibilityNodeInfosByViewId("com.google.android.gsf.login:id/next_button");
-        if (next1Nodes != null && !next1Nodes.isEmpty()) {
-
-            for (AccessibilityNodeInfo node : next1Nodes) {
-                if (node.isEnabled()) {
-                    node.performAction(AccessibilityNodeInfo.ACTION_FOCUS); // 获取焦点
-                    boolean performResult = node.performAction(AccessibilityNodeInfo.ACTION_CLICK);
-                    Log.i(TAG, "next1Nodes perform result is " + performResult);
-                    if (performResult) {
-//                        if(GmailActiveAutomationService.isGmailActiveService)
-//                        {
-//                            isInputedPassword = false;
-//                        }
-//                        node.recycle();
-                        return true;
-                    }
-                }
-//                node.recycle();
-            }
-        } else {
-            Log.i(TAG, "next1Nodes is null");
-        }
-        return false;
-    }
+//    public static final boolean next1Action(AccessibilityNodeInfo nodeInfo) {
+//        if (nodeInfo == null) {
+//            return false;
+//        }
+//        List<AccessibilityNodeInfo> next1Nodes = nodeInfo.findAccessibilityNodeInfosByViewId("com.google.android.gsf.login:id/next_button");
+//        if (next1Nodes != null && !next1Nodes.isEmpty()) {
+//
+//            for (AccessibilityNodeInfo node : next1Nodes) {
+//                if (node.isEnabled()) {
+//                    node.performAction(AccessibilityNodeInfo.ACTION_FOCUS); // 获取焦点
+//                    boolean performResult = node.performAction(AccessibilityNodeInfo.ACTION_CLICK);
+//                    Log.i(TAG, "next1Nodes perform result is " + performResult);
+//                    if (performResult) {
+////                        if(GmailActiveAutomationService.isGmailActiveService)
+////                        {
+////                            isInputedPassword = false;
+////                        }
+////                        node.recycle();
+//                        return true;
+//                    }
+//                }
+////                node.recycle();
+//            }
+//        } else {
+//            Log.i(TAG, "next1Nodes is null");
+//        }
+//        return false;
+//    }
 
 
     // OK
@@ -162,20 +164,14 @@ public class Actions {
         if (button1Nodes != null && !button1Nodes.isEmpty()) {
 
             for (AccessibilityNodeInfo node : button1Nodes) {
-                if (node.isEnabled()) {
+                if (node!=null && node.isEnabled()) {
                     node.performAction(AccessibilityNodeInfo.ACTION_FOCUS); // 获取焦点
                     boolean performResult = node.performAction(AccessibilityNodeInfo.ACTION_CLICK);
                     Log.i(TAG, "button1Nodes perform result is " + performResult);
                     if (performResult) {
-//                        if(GmailActiveAutomationService.isGmailActiveService)
-//                        {
-//                            isInputedPassword = false;
-//                        }
-//                        node.recycle();
                         return true;
                     }
                 }
-//                node.recycle();
             }
         } else {
             Log.i(TAG, "button1Nodes is null");
@@ -186,35 +182,29 @@ public class Actions {
 
     // android.widget.Button
     // com.google.android.gsf.login:id/next_button
-    public static final boolean next2Action(AccessibilityNodeInfo nodeInfo) {
-        if (nodeInfo == null) {
-            return false;
-        }
-
-        List<AccessibilityNodeInfo> next2Nodes = nodeInfo.findAccessibilityNodeInfosByViewId("com.google.android.gsf.login:id/next_button");
-        if (next2Nodes != null && !next2Nodes.isEmpty()) {
-
-            for (AccessibilityNodeInfo node : next2Nodes) {
-                if (node.isEnabled()) {
-                    node.performAction(AccessibilityNodeInfo.ACTION_FOCUS); // 获取焦点
-                    boolean performResult = node.performAction(AccessibilityNodeInfo.ACTION_CLICK);
-                    Log.i(TAG, "next2Nodes perform result is " + performResult);
-                    if (performResult) {
-//                        if(GmailActiveAutomationService.isGmailActiveService)
-//                        {
-//                            isInputedPassword = false;
-//                        }
-//                        node.recycle();
-                        return true;
-                    }
-                }
-//                node.recycle();
-            }
-        } else {
-            Log.i(TAG, "next2Nodes is null");
-        }
-        return false;
-    }
+//    public static final boolean next2Action(AccessibilityNodeInfo nodeInfo) {
+//        if (nodeInfo == null) {
+//            return false;
+//        }
+//
+//        List<AccessibilityNodeInfo> next2Nodes = nodeInfo.findAccessibilityNodeInfosByViewId("com.google.android.gsf.login:id/next_button");
+//        if (next2Nodes != null && !next2Nodes.isEmpty()) {
+//
+//            for (AccessibilityNodeInfo node : next2Nodes) {
+//                if (node.isEnabled()) {
+//                    node.performAction(AccessibilityNodeInfo.ACTION_FOCUS); // 获取焦点
+//                    boolean performResult = node.performAction(AccessibilityNodeInfo.ACTION_CLICK);
+//                    Log.i(TAG, "next2Nodes perform result is " + performResult);
+//                    if (performResult) {
+//                        return true;
+//                    }
+//                }
+//            }
+//        } else {
+//            Log.i(TAG, "next2Nodes is null");
+//        }
+//        return false;
+//    }
 
     // com.android.vending:id/positive_button
     // android.widget.Button
@@ -235,7 +225,7 @@ public class Actions {
                     Log.i(TAG, "torAcceptNodes perform result is " + performResult);
                     if (performResult) {
                         try {
-                            Thread.sleep(3000);
+                            Thread.sleep(10000);
                             Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + LoginAutoService.gmailInfo.packageName));
                             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                             context.startActivity(intent);
@@ -271,7 +261,7 @@ public class Actions {
                 Log.i(TAG, "notNowNodes perform result is " + performResult);
                 if (performResult) {
                     try {
-                        Thread.sleep(2000);
+                        Thread.sleep(3000);
                         ShellUtils.execCommand("input tap 600 750", true);
                     }catch (Exception e){
                         e.printStackTrace();
@@ -295,24 +285,23 @@ public class Actions {
         if (nodeInfo == null) {
             return false;
         }
-
         List<AccessibilityNodeInfo> installNodes = nodeInfo.findAccessibilityNodeInfosByViewId("com.android.vending:id/buy_button");
         if (installNodes != null && !installNodes.isEmpty()) {
 
             for (AccessibilityNodeInfo node : installNodes) {
-                node.performAction(AccessibilityNodeInfo.ACTION_FOCUS); // 获取焦点
-                boolean performResult = node.performAction(AccessibilityNodeInfo.ACTION_CLICK);
-                Log.i(TAG, "installNodes perform result is " + performResult);
-                if (performResult) {
-//                        if(GmailActiveAutomationService.isGmailActiveService)
-//                        {
-//                            isInputedPassword = false;
-//                        }
-//                        node.recycle();
-                    return true;
+                if (node!=null){
+                    try {
+                        Thread.sleep(5000);
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
+                    node.performAction(AccessibilityNodeInfo.ACTION_FOCUS); // 获取焦点
+                    boolean performResult = node.performAction(AccessibilityNodeInfo.ACTION_CLICK);
+                    Log.i(TAG, "installNodes perform result is " + performResult);
+                    if (performResult) {
+                        return true;
+                    }
                 }
-
-//                node.recycle();
             }
         } else {
             Log.i(TAG, "installNodes is null");
@@ -333,20 +322,19 @@ public class Actions {
         if (acceptNodes != null && !acceptNodes.isEmpty()) {
 
             for (AccessibilityNodeInfo node : acceptNodes) {
-                if (node.isEnabled()) {
+                if (node!=null && node.isEnabled()) {
+                    try {
+                        Thread.sleep(2000);
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
                     node.performAction(AccessibilityNodeInfo.ACTION_FOCUS); // 获取焦点
                     boolean performResult = node.performAction(AccessibilityNodeInfo.ACTION_CLICK);
                     Log.i(TAG, "acceptNodes perform result is " + performResult);
                     if (performResult) {
-//                        if(GmailActiveAutomationService.isGmailActiveService)
-//                        {
-//                            isInputedPassword = false;
-//                        }
-//                        node.recycle();
                         return true;
                     }
                 }
-//                node.recycle();
             }
         } else {
             Log.i(TAG, "acceptNodes is null");
@@ -366,20 +354,19 @@ public class Actions {
         if (cancelNodes != null && !cancelNodes.isEmpty()) {
 
             for (AccessibilityNodeInfo node : cancelNodes) {
-                if (node.isEnabled()) {
+                if (node!=null && node.isEnabled()) {
+                    try {
+                        Thread.sleep(5000);
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
                     node.performAction(AccessibilityNodeInfo.ACTION_FOCUS); // 获取焦点
                     boolean performResult = node.performAction(AccessibilityNodeInfo.ACTION_CLICK);
                     Log.i(TAG, "cancelNodes perform result is " + performResult);
                     if (performResult) {
-//                        if(GmailActiveAutomationService.isGmailActiveService)
-//                        {
-//                            isInputedPassword = false;
-//                        }
-//                        node.recycle();
                         return true;
                     }
                 }
-//                node.recycle();
             }
         } else {
             Log.i(TAG, "cancelNodes is null");
@@ -627,9 +614,9 @@ public class Actions {
                     boolean performResult = node.performAction(AccessibilityNodeInfo.ACTION_CLICK);
                     Log.i(TAG, "getStartedAction perform result is " + performResult);
                     if (performResult) {
-                        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id="+LoginAutoService.gmailInfo.packageName));
-                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        context.startActivity(intent);
+//                        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id="+LoginAutoService.gmailInfo.packageName));
+//                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//                        context.startActivity(intent);
                         return true;
                     }
                 }
@@ -693,4 +680,22 @@ public class Actions {
 
     // com.android.vending:id/review_timestamp
     // 已经打过
+    public static final boolean reviewedAction(AccessibilityNodeInfo nodeInfo){
+        if (nodeInfo == null) {
+            return false;
+        }
+        List<AccessibilityNodeInfo> reviewedNodes = nodeInfo.findAccessibilityNodeInfosByViewId("com.android.vending:id/review_timestamp");
+        if (reviewedNodes != null && !reviewedNodes.isEmpty()) {
+
+            for (AccessibilityNodeInfo node : reviewedNodes) {
+                if (node!=null){
+                    Log.i(TAG, "reviewedNodes perform result is reviewed");
+                    return true;
+                }
+            }
+        } else {
+            Log.i(TAG, "reviewedNodes is null");
+        }
+        return false;
+    }
 }

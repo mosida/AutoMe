@@ -44,7 +44,7 @@ public class BackupService extends IntentService{
 
     public void startTitan(){
         boolean isFileExist = checkBackFileExist();
-        Log.i(TAG, "the backup file is exist : "+isFileExist);
+        Log.i(TAG, "the backup dir is exist : "+isFileExist);
         if (isFileExist){
             Log.i(TAG, "Restore the files!");
             LoginAutoService.titanState = Constants.TITAN_RESOTRE;
